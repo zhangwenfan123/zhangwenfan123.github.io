@@ -180,13 +180,13 @@ navbar:
     # 导航栏菜单，可自行增减.
     # Navigation bar menu.
     menu:
-        # 首页: /
-        # 归档: /archives/
-        # 分类: /categories/
-        # 标签: /tags/
-        # 说说: /talk/
-        # 友链: /links/
-        # 关于: /about/
+         首页: /
+         归档: /archives/
+         分类: /categories/
+         标签: /tags/
+         说说: /talk/
+         友链: /links/
+         关于: /about/
         # ...
 
 
@@ -239,7 +239,8 @@ post:
 
     # 评论插件
     # Comment plugin
-    comment: false
+    comment: 
+        enable: false
 
     # 代码显示设置
     # Code display setting
