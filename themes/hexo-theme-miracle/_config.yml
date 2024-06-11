@@ -182,10 +182,10 @@ navbar:
     menu:
          首页: /
          归档: /archives/
-         分类: /categories/
-         标签: /tags/
-         说说: /talk/
-         友链: /links/
+         # 分类: /categories/
+         # 标签: /tags/
+         # 说说: /talk/
+         # 友链: /links/
          记录: /record/
          关于: /about/
         # ...
