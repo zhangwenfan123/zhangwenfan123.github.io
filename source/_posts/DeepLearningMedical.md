@@ -29,8 +29,9 @@ $\underline{\text{00. Themes and Topics}}$
 
 >. In the supervised setting, given datasets D = {(x1, y1), (x2, y2), . . . , (xN , yN )}, the corresponding loss aims to minimize the distance between the predicted value y′ and the ground truth y, as Eq. (1).
 
+
 $$
-\mathscr{L}_{supervised} = \mathop{min}\limits_{\theta} \frac{1} {N} \sum_{i=1}^N(y_i',y_i)
+\mathscr{L}= \mathop{min}\limits_{\theta} \frac{1} {N} \sum_{i=1}^N(y_i', y_i)
 $$
 
 *Weakly Supervised Learning*
