@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    
+    <link rel="apple-touch-icon" sizes="76x76" href="/null">
+    <link rel="icon" type="image/png" href="/null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <title>Incomplete-view oriented kernel learning method with generalization error bound - Hexo</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    
+    
+    <meta name="description" content="Multi-view learning (MVL) is a promising direction and most MVL methods work under the assumption that data are complete in all views. However, this assumption is often violated in practice due to the difficulties of high cost, equipment failure, and so on. Besides, the amount of data with missing views is particularly huge. Therefore, it is challenging yet valuable to fully leverage the large-scale incomplete-view data.">
+    <meta name="author" content="Zhang Wenfan">
+    <meta name="keywords" content="">
+    <meta property="og:title" content="Incomplete-view oriented kernel learning method with generalization error bound"/>
+    <style>
+
+
+    
+    :root{
+        --shadow-color: rgba(0,0,0,0.2);
+        --sec-shadow: rgba(0,0,0,0.03);
+        --shadow-hover-color: rgba(0,0,0,0.28);
+        --first-text-color: #475b6d;
+        --second-text-color: #37475b;
+        --third-text-color: #858585;
+        --default-text-color: #505050;
+        --default-link-color: #007bff;
+        --link-color: #000000;
+        --second-link-color: #4F9BFA;
+        --code-color:rgba(27,31,35,.05);
+        --post-bkg-color: #fff;
+        --page-bkg-color: #f2f5f8;
+        --nav-a-hover-color: #3498db;
+        --post-sec-text-color: #718096;
+        --sec-bkg: #f2f5f8;
+        --color-mode: 'light';
+        --bkg-h: rgba(255,255,255,0.6);
+        --bkg-m: #e1e4e8;
+        --home-title-color: #4169E1;
+        --shadow: 0 4px 10px rgba(0,2,4,0.06),0 0 1px rgba(0,2,4,0.11);
+        --hr-color: #ddd;
+        --bg-t: #f4f4f4;
+        --nav-bkg: rgba(255,255,255,0.6);
+    }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-mode: 'dark';
+  }
+
+  :root:not([data-theme]) {
+    --first-text-color: hsla(0,0%,100%,0.92);
+    --second-text-color: hsla(0,0%,100%,0.86);
+    --third-text-color: #a7a9ad;
+    --default-text-color: #505050;
+    --default-link-color: #1589e9;
+    --link-color: #000000;
+    --second-link-color: #30a9de;
+    --post-bkg-color: #252d38;
+    --page-bkg-color: #181c27;
+    --nav-a-hover-color: #3498db;
+    --post-sec-text-color: #a7a9ad;
+    --sec-bkg: #364151;
+    --bkg-h: rgba(255,255,255,0.2);
+    --bkg-m: rgba(255,255,255,0.1);
+    --home-title-color: rgb(226, 82, 90);
+    --code-color:#3e4b5e;
+    --shadow: none;
+    --hr-color: #718096;
+    --bg-t: #364151;
+    --nav-bkg: rgba(13,17,23,0.6);
+  }
+}
+
+[data-theme='dark'] {
+    --shadow-color: rgba(0,0,0,0.2);
+    --shadow-hover-color: rgba(0,0,0,0.28);
+    --first-text-color: hsla(0,0%,100%,0.92);
+    --second-text-color: hsla(0,0%,100%,0.86);
+    --third-text-color: #a7a9ad;
+    --default-text-color: #505050;
+    --default-link-color: #1589e9;
+    --link-color: #000000;
+    --second-link-color: #30a9de;
+    --post-bkg-color: #252d38;
+    --page-bkg-color: #181c27;
+    --nav-a-hover-color: #3498db;
+    --post-sec-text-color: #a7a9ad;
+    --sec-bkg: #364151;
+    --bkg-h: rgba(255,255,255,0.2);
+    --bkg-m: rgba(255,255,255,0.1);
+    --home-title-color: rgb(226, 82, 90);
+    --code-color:#3e4b5e;
+    --shadow: none;
+    --hr-color: #718096;
+    --bg-t: #364151;
+    --nav-bkg: rgba(13,17,23,0.6);
+}
+
+</style>
+
+
+
+<style>
+#page-main,footer,.p-btn{
+    display: none;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+body {
+    background-color: var(--page-bkg-color);
+    color: var(--second-text-color);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    transition: all .3s;
+}
+a {
+    color: var(--default-link-color);
+    text-decoration: none;
+    background-color: transparent;
+}
+a:hover{
+    color: var(--second-link-color);
+}
+.main-content,.post-card-main{
+    margin: 30px;
+}
+
+
+
+@media (max-width: 410px){
+    .post-card-main{
+        max-width: 350px!important;
+    }
+}
+
+@media (max-width: 980px){
+    .post-card-main{
+        max-width: 520px!important;
+    }
+}
+
+
+@media (min-width: 780px){ 
+    h3{
+        font-size: 1.5rem;
+        line-height: 1.5em;
+    }
+}
+@media (min-width: 1280px){ 
+    h3{
+        font-size: 1.7rem;
+        line-height: 1.5em;
+    }
+}
+@media (min-width: 2096px){ 
+    h3{
+        font-size: 1.8rem;
+        line-height: 1.5em;
+    }
+}
+
+.text-center{
+    text-align: center!important;
+}
+.middle-center{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    height: 100%;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    height: 54px;
+    padding: 0 1.25rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--bkg-m);
+    background-color: var(--nav-bkg);
+    backdrop-filter: blur(4px);
+    transition: all .3s;
+}
+header .header__left, header .header__right {
+    display: flex;
+    align-items: center;
+    font-family: rubik,sans-serif,Varela Round;
+}
+header .header__left .logo__text {
+    font-size: 18px;
+    font-weight: 450;
+    padding: 14.5px 10px;
+    border-radius: 5px;
+    color: var(--second-text-color);
+}
+header .header__right .navbar__menus {
+    height: 54px;
+    padding: 0 0 0 15px;
+}
+header .header__right .button {
+    color: var(--second-text-color);
+}
+header .header__right .navbar__menus .navbar-menu {
+    display: inline-block;
+    align-items: center;
+    height: 54px;
+    padding: 0 10px;
+    font-size: 16px;
+    line-height: 54px;
+}
+header .header__right .dropdown-icon {
+    display: none;
+    height: 54px;
+    padding: 15px 10px;
+    border: 0;
+    background-color: transparent;
+}
+header .header__right .dropdown-menus {
+    line-height: 2rem;
+    animation: slide-in .15s ease 1;
+    display: none;
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: calc(54px + 10px);
+    border-radius: 6px;
+    padding: 24px;
+    background-color: var(--page-bkg-color);
+    border: 1px solid var(--bkg-m);
+    z-index: 9999;
+    justify-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+header .header__right #btn-search, header .header__right #btn-toggle-dark{
+    display: inline-block;
+    padding:  18px 10px;
+    height: 25px;
+}
+header .header__right #btn-dropdown{
+  display: inline-block;
+  padding:  13.5px 0;
+}
+header .header__right .dropdown-menus .dropdown-menu {
+    padding: 10px;
+    color: var(--second-text-color);
+}
+@media screen and (max-width: 764px){
+.navbar__menus {
+    display: none!important;
+}
+.dropdown-icon {
+    display: inline-block!important;
+}
+}
+.p-btn{
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    contain: layout;
+}
+.toc-btn,.click-btn{
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    align-items: center;
+    margin-top: .5rem;
+    font-size: .75rem;
+    background-color: var(--sec-bkg);
+    display: block;
+    padding: 0.9rem;
+    box-shadow: 0 0.3rem 0.6rem rgba(48,55,66,.15);
+    border: none;
+    border-radius: 0.5rem;
+    line-height: 1;
+    color: var(--first-text-color);
+}
+.toc-link{
+    color: var(--second-text-color);
+}
+
+#css-loading h3{
+    font-weight: 500;
+    font-size: 1.4rem;
+    text-align: center;
+    position: fixed;
+    top: 200px;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    animation: cssLoad;
+    animation-delay: 0.3s;
+    -webkit-animation: cssLoad;
+    -webkit-animation-delay: 0.3s;
+}
+@keyframes cssLoad {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.9;
+    }
+}
+
+
+.memorial {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); filter:gray;
+}
+
+
+    .post-copyright:after {
+        position: absolute;
+        color: #fff;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 496 512'%3E%3Cpath fill='gray' d='M245.8 214.9l-33.2 17.3c-9.4-19.6-25.2-20-27.4-20-22.2 0-33.3 14.6-33.3 43.9 0 23.5 9.2 43.8 33.3 43.8 14.4 0 24.6-7 30.5-21.3l30.6 15.5a73.2 73.2 0 01-65.1 39c-22.6 0-74-10.3-74-77 0-58.7 43-77 72.6-77 30.8-.1 52.7 11.9 66 35.8zm143 0l-32.7 17.3c-9.5-19.8-25.7-20-27.9-20-22.1 0-33.2 14.6-33.2 43.9 0 23.5 9.2 43.8 33.2 43.8 14.5 0 24.7-7 30.5-21.3l31 15.5c-2 3.8-21.3 39-65 39-22.7 0-74-9.9-74-77 0-58.7 43-77 72.6-77C354 179 376 191 389 214.8zM247.7 8C104.7 8 0 123 0 256c0 138.4 113.6 248 247.6 248C377.5 504 496 403 496 256 496 118 389.4 8 247.6 8zm.8 450.8c-112.5 0-203.7-93-203.7-202.8 0-105.5 85.5-203.3 203.8-203.3A201.7 201.7 0 01451.3 256c0 121.7-99.7 202.9-202.9 202.9z'/%3E%3C/svg%3E");
+        content: ' ';
+        height: 10rem;
+        width: 10rem;
+        right: -2rem;
+        top: -2rem;
+        opacity: .1;
+    }
+
+</style>
+
+    
+
+    
+        <!--
+        <link rel="stylesheet" href="/css/page.css" media="print"
+            onload="this.media='all';this.onload=null">
+        <noscript>-->
+            <link rel="stylesheet" href="/css/page.css">
+        <!--</noscript>-->
+    
+    
+    <link rel="stylesheet" href="/css/main.css" media="print" onload="this.media='all';this.onload=null">
+    <noscript>
+        <link rel="stylesheet" href="/css/main.css">
+    </noscript>
+
+    
+    <script src="/js/main.js"></script>
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+    <body>
+        <header>
+            
+<div class="header__left">
+	<a href="/" class="button"><span class="logo__text">Theme Miracle</span></a>
+</div>
+<div class="header__right">
+	<div class="navbar__menus">
+		
+		<a href="/" class="button">
+			<div class="navbar-menu">首页</div>
+		</a>
+		
+		<a href="/archives/" class="button">
+			<div class="navbar-menu">归档</div>
+		</a>
+		
+		<a href="/categories/" class="button">
+			<div class="navbar-menu">分类</div>
+		</a>
+		
+		<a href="/tags/" class="button">
+			<div class="navbar-menu">标签</div>
+		</a>
+		
+		<a href="/talk/" class="button">
+			<div class="navbar-menu">说说</div>
+		</a>
+		
+		<a href="/links/" class="button">
+			<div class="navbar-menu">友链</div>
+		</a>
+		
+		<a href="/about/" class="button">
+			<div class="navbar-menu">关于</div>
+		</a>
+		
+	</div>
+	
+	<a href="/search/" class="button">
+		<div id="btn-search">
+			<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1024 1024" width="24" height="24" fill="currentColor"
+				stroke="currentColor" stroke-width="32">
+				<path
+					d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z">
+				</path>
+			</svg>
+		</div>
+	</a>
+	
+	<a href="javaScript:void(0);" class="button" id="btn-toggle-dark">
+		<div>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none"
+				stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+			</svg>
+		</div>
+	</a>
+	<a href="javaScript:void(0);" class="dropdown-icon button">
+		<div id="btn-dropdown">
+			<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1024 1024" width="24" height="24" fill="currentColor"
+				stroke="currentColor" stroke-width="32" stroke-linecap="round">
+				<path
+					d="M903.43 561.52H148.8c-13.25 0-24-10.75-24-24s10.75-24 24-24h754.63c13.25 0 24 10.75 24 24s-10.75 24-24 24zM903.43 204.31H148.8c-13.25 0-24-10.75-24-24s10.75-24 24-24h754.63c13.25 0 24 10.75 24 24s-10.75 24-24 24zM903.43 918.73H148.8c-13.25 0-24-10.75-24-24s10.75-24 24-24h754.63c13.25 0 24 10.75 24 24s-10.75 24-24 24z"
+					fill="currentColor"></path>
+			</svg>
+		</div>
+	</a>
+	<div class="dropdown-menus" id="dropdown-menus">
+		
+		<a href="/" class="dropdown-menu button">首页</a>
+		<br>
+		
+		<a href="/archives/" class="dropdown-menu button">归档</a>
+		<br>
+		
+		<a href="/categories/" class="dropdown-menu button">分类</a>
+		<br>
+		
+		<a href="/tags/" class="dropdown-menu button">标签</a>
+		<br>
+		
+		<a href="/talk/" class="dropdown-menu button">说说</a>
+		<br>
+		
+		<a href="/links/" class="dropdown-menu button">友链</a>
+		<br>
+		
+		<a href="/about/" class="dropdown-menu button">关于</a>
+		<br>
+		
+	</div>
+</div>
+
+        </header>
+        <div id="top"></div>
+        <div id="page-main" class="main-content">
+        <div class="mg-top">
+            
+
+<article class="page">
+<div id="post-meta-m">
+    <div class="post-meta" id="post-meta">
+  <h3>Incomplete-view oriented kernel learning method with generalization error bound</h3>
+    
+      <span class="post-meta-label">
+        Zhang Wenfan
+      </span>
+    
+    
+      <span class="post-meta-label">
+        <span class="p-dot"></span>
+        <time datetime="2022-06-08 00:00" pubdate>
+          2022-06-08
+        </time>
+      </span>
+    
+    
+    
+    
+  </div>
+  
+</div>
+<div class="article-m">
+  <div class="post-toc">
+    
+      
+    
+  </div>
+    <div id="article">
+      <div id="post-content" class="markdown-body textretty">
+        <p>$\underline{\text{-01. Questions}}$</p>
+<blockquote>
+<ol>
+<li>What’s the difference between <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1705.09406"><em>Multimodal Machine Learning</em></a> and <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1304.5634">Multi-view Learning</a>? How to define the specific concept? Are the two terms refer to the same thing?</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>Is the the RPSVM-2V solution just linear Integration of RSVM and PSVM-2V? According to the data completeness, jump to the certain branch by “IF”?</li>
+</ol>
+</blockquote>
+<p>$\underline{\text{00. Key Concepts and Definitions}}$</p>
+<ul>
+<li>0.1 <strong>KL(Kernel Methods)</strong><ul>
+<li><em>Support Vector Machines (SVM)</em></li>
+<li><em>Radial Basis Function (RBF)</em></li>
+<li><em>Linear Discriminate Analysis (LDA)</em></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Kernels or kernel methods (also called Kernel functions) are sets of different types of algorithms that are being used for pattern analysis. They are used to solve a non-linear problem by using a linear classifier. Kernels Methods are employed in SVM (Support Vector Machines) which are used in classification and regression problems.</p>
+</blockquote>
+<p><em>Support Vector Machines (SVM)</em></p>
+<blockquote>
+<p>In machine learning, support-vector machines (SVMs, also support-vector networks) are supervised learning models with associated learning algorithms that analyze data for classification and regression analysis.</p>
+</blockquote>
+<p>$$<br>最优参数的SVM决策函数：<br>f(x)&#x3D;sgn(w^{<em>T}x+b^</em>)&#x3D;sgn(\sum_{n&#x3D;1}^N \lambda_n^<em>y^n(x^n)^Tx+b^</em>)<br>$$</p>
+<p>在一个变换后的特征空间中，SVM的决策函数：<br>$$<br>f(x)&#x3D;sgn(w^{<em>T}\phi(x)+b^</em>)&#x3D;sgn(\sum_{n&#x3D;1}^N \lambda_n^<em>y^nK(x^n,x)x+b^</em>)<br>$$<br>其中核函数（Kernel）为：<br>$$<br>K(x,z)&#x3D;\phi(x)^T\phi(z)<br>$$</p>
+<p><em>Radial Basis Function (RBF)</em></p>
+<blockquote>
+<p>A radial basis function (RBF) is a real-valued function φ whose value depends only on the distance between the input and some fixed point, either the origin, so that φ(𝐱)&#x3D;φ(|𝐱|), or some other fixed point 𝐜, called a center, so that φ(𝐱)&#x3D;φ(|𝐱-𝐜|). Any function φ that satisfies the property φ(𝐱)&#x3D;φ(|𝐱|) is a radial function. The distance is usually Euclidean distance, although other metrics are sometimes used.</p>
+</blockquote>
+<p><em>Linear Discriminate Analysis (LDA)</em></p>
+<blockquote>
+<p>Linear discriminant analysis (LDA), normal discriminant analysis (NDA), or discriminant function analysis is a generalization of Fisher’s linear discriminant, a method used in statistics and other fields, to find a linear combination of features that characterizes or separates two or more classes of objects or events. The resulting combination may be used as a linear classifier, or, more commonly, for dimensionality reduction before later classification.</p>
+</blockquote>
+<ul>
+<li>0.2 MKL(Multiple Kernel Learning)<ul>
+<li><em>Supervised learning</em><ul>
+<li>Fixed rules approaches</li>
+<li>Heuristic approaches</li>
+<li>Optimization approaches</li>
+<li>Bayesian approaches</li>
+<li>Boosting approaches</li>
+</ul>
+</li>
+<li><em>Semi-Supervised learning</em></li>
+<li><em>UnSupervised learning</em></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Multiple kernel learning refers to a set of machine learning methods that use a predefined set of kernels and learn an optimal linear or non-linear combination of kernels as part of the algorithm. Reasons to use multiple kernel learning include a) the ability to select for an optimal kernel and parameters from a larger set of kernels, reducing bias due to kernel selection while allowing for more automated machine learning methods, and b combining data from different sources that have different notions of similarity and thus require different kernels. Instead of creating a new kernel, multiple kernel algorithms can be used to combine kernels already established for each individual data source.</p>
+</blockquote>
+<p>Multiple kernel learning (MKL) algorithms aim to find the best convex combination of a set of kernels to form the best classifier. Many algorithms have been presented in recent years and they form two classes.</p>
+<p><em><strong>Supervised learning</strong></em></p>
+<p>Fixed rules approaches</p>
+<p>$$<br>k((x_{1i},x_{1j}),(x_{2i},x_{2j}))&#x3D;k(x_{1i},x_{2i})k(x_{1j},x_{2j})+k(x_{1i},x_{2j})k(x_{1j},x_{2i}).<br>$$</p>
+<p>Heuristic approaches</p>
+<p>These algorithms use a combination function that is parameterized. we can define<br>$$<br>\beta_m&#x3D;\frac{\pi_m - \delta} {\sum_{i&#x3D;0}^N(\pi_h-\delta)}<br>$$</p>
+<p>Other approaches use a definition of kernel similarity, such as<br>$$<br>{\displaystyle A(K_{1},K_{2})&#x3D;{\frac {\langle K_{1},K_{2}\rangle }{\sqrt {\langle K_{1},K_{1}\rangle \langle K_{2},K_{2}\rangle }}}}<br>$$</p>
+<p>Optimization approaches</p>
+<blockquote>
+<p>These approaches solve an optimization problem to determine parameters for the kernel combination function. This has been done with similarity measures and structural risk minimization approaches. For similarity measures such as the one defined above, the problem can be formulated as follows:[9]</p>
+</blockquote>
+<p>$$<br>\max_{\beta,\operatorname {tr}(K’<em>{tra})&#x3D;1,K’\geq 0}A(K’</em>{tra},YY^{T}).<br>$$</p>
+<p>Bayesian approaches</p>
+<blockquote>
+<p>Bayesian approaches put priors on the kernel parameters and learn the parameter values from the priors and the base algorithm. For example, the decision function can be written as</p>
+</blockquote>
+<p>$$<br>f(x)&#x3D;\sum_{i&#x3D;0}^{n}\alpha_{i}\sum_{m&#x3D;1}^{p}\eta_{m}K_{m}(x_{i}^{m},x^{m})<br>$$</p>
+<p>Boosting approaches</p>
+<blockquote>
+<p>Boosting approaches add new kernels iteratively until some stopping criteria that is a function of performance is reached. An example of this is the MARK model developed by Bennett et al. (2002) [14]</p>
+</blockquote>
+<p>$$<br>f(x)&#x3D;\sum_{i&#x3D;1}^{N}\sum_{m&#x3D;1}^{P}\alpha_{i}^{m}K_{m}(x_{i}^{m},x^{m})+b<br>$$</p>
+<p><em><strong>Semi-Supervised learning</strong></em></p>
+<p>Let $L&#x3D;{(x_{i},y_{i})}$ be the labeled data, and let $U&#x3D;{x_{i}}$ be the set of unlabeled data. Then, we can write the decision function as follows.<br>$$<br>f(x)&#x3D;\alpha_{0}+\sum_{i&#x3D;1}^{|L|}\alpha_{i}K_{i}(x)<br>$$</p>
+<p>The problem can be written as</p>
+<p>$$<br>\min_{f}L(f)+\lambda R(f)+\gamma \Theta (f)<br>$$</p>
+<p>where $L$ is the loss function (weighted negative log-likelihood in this case), $R$ is the regularization parameter (Group LASSO in this case), and $\Theta$ is the conditional expectation consensus (CEC) penalty on unlabeled data. The CEC penalty is defined as follows. Let the marginal kernel density for all the data be</p>
+<p>$$<br>g_m^\pi(x)&#x3D;(\phi_m^\pi,\varphi_m(x))<br>$$<br>where $\psi_{m}(x)&#x3D;[K_{m}(x_{1},x),\ldots ,K_{m}(x_{L},x)]^{T}$(the kernel distance between the labeled data and all of the labeled and unlabeled data) and $\phi_{m}^{\pi } $ is a non-negative random vector with a 2-norm of 1. The value of $\Pi $ is the number of times each kernel is projected. Expectation regularization is then performed on the MKD, resulting in a reference expectation $q_{m}^{pi}(y|g_{m}^{\pi }(x))$ and model expectation $p_{m}^{\pi }(f(x)|g_{m}^{\pi }(x))$. Then, we define</p>
+<p>$$<br>\Theta &#x3D;{\frac {1} {\Pi}}\sum_{\pi &#x3D;1}^{\Pi }\sum_{m&#x3D;1}^{M}D(q_{m}^{pi}(y|g_{m}^(x))||p_{m}^{\pi}(f(x)|g_{m}^{\pi}(x)))<br>$$</p>
+<p>where $D(Q||P)&#x3D;\sum_{i}Q(i)\ln {\frac {Q(i)}{P(i)}} $ is the Kullback-Leibler divergence. The combined minimization problem is optimized using a modified block gradient descent algorithm. For more information, see Wang et al.[15]</p>
+<p><em><strong>UnSupervised learning</strong></em></p>
+<p>Combining these terms, we can write the minimization problem as follows.</p>
+<p>$$<br>\min_{\beta ,B}\sum_{i&#x3D;1}^{n}\left\Vert x_{i}-\sum_{x_{j}\in B_{i}}K(x_{i},x_{j})x_{j}\right\Vert^{2}+\gamma_{1}\sum_{i&#x3D;1}^{n}\sum_{x_{j}\in B_{i}}K(x_{i},x_{j})\left\Vert x_{i}-x_{j}\right\Vert^{2}+\gamma_{2}\sum_{i}|B_{i}|<br>$$<br>where . One formulation of this is defined as follows. Let $D\in {0,1}^{n\times n}$ be a matrix such that $D_{ij}&#x3D;1$ means that $x_{i}$ and $x_{j}$ are neighbors. Then, $B_{i}&#x3D;x_{j}:D_{ij}&#x3D;1.$. Note that these groups must be learned as well. Zhuang et al. solve this problem by an alternating minimization method for $K$ and the group $B_{i}$. For more information, see Zhuang et al.[16]</p>
+<ul>
+<li>0.3 MVL(Multi-view Learning)</li>
+</ul>
+<blockquote>
+<p>Data in reality often exhibit in multi-modal forms, called multi-view data. Each view distributed in distinct feature spaces<br>describes different attributes of the same object with high dimension, strong heterogeneity and rich description. The performance of multi-view learning models compares more favorably than that of single-view learning models. The existing MVL<br>approaches either comply with the consensus principle or the complementary principle. Here we mainly review SVM-based<br>MVL classification methods.</p>
+</blockquote>
+<p>$\underline{\text{01. Background and Key Problems}}$</p>
+<ul>
+<li>1.1 Multi-view data and learning</li>
+</ul>
+<blockquote>
+<p>The simplest way is to train the model on the concatenated view. However, this approach ignores the correlation and interaction among views, which may cause overfitting and dimension disasters [3,4]. In this case, multi-view learning (MVL) has emerged and achieved great success in classification [5], clustering[6,7], feature selection [8,9], etc.</p>
+</blockquote>
+<blockquote>
+<p>With the help of different kinds sensor equipment, data tracking from different aspects is much easier. In most of the cases, multi modal data gives a better view of a certain event, characterising the specific object in comprehensive way, by providing more information.</p>
+</blockquote>
+<ul>
+<li>1.2 Incomplete multi-view data</li>
+</ul>
+<blockquote>
+<p>In real-world applications, we often confront an obstacle that only partial views are available, due to the difficulties of high<br>cost, equipment failure, and so on [13]. Thus, learning with multiple incomplete views is a challenging yet valuable work.</p>
+</blockquote>
+<blockquote>
+<p>Unfortunately, the aforementioned strategies may either lose important information or introduce some errors, especially for the case where the amount of incomplete multi-view data is particularly large. In contrast, learning from massive complete-view data without view-missing is also complicated and time-consuming.</p>
+</blockquote>
+<p>$\underline{\text{02. Solution Approach }}$</p>
+<ul>
+<li>reduced support vector machine (RSVM)</li>
+<li>multi-view privileged support vector machine (PSVM-2V)</li>
+<li>mix solution RPSVM-2V(Integration with RSVM and PSVM-2V)</li>
+</ul>
+<p><em><strong>RSVM</strong></em></p>
+<p>The RSVM can be expressed as follows:<br>$$<br>\mathop{min}\limits_{\overline{v},\gamma,\xi}<br>\enspace \enspace \enspace \enspace<br>\frac{1} {2}(\overline{v’} \overline{v}+\gamma^2)+\frac{C} {2} \xi’ \xi<br>$$</p>
+<p>$$<br>s.t. \enspace \enspace D(K(A,\overline{A’})\overline{v}-e\gamma)+\xi\ge e, \xi\ge 0.<br>$$</p>
+<p><em><strong>PSVM-2V</strong></em></p>
+<p>To begin with, we can directly reformulate PSVM-2V (1) for incomplete-view learning, as shown below.</p>
+<p>$$<br>\mathop{min}\limits_{W_{A_1},W_{A_1},\xi^{A_1},\xi^{A_2},\eta}<br>\enspace \enspace \enspace \enspace<br>\frac{1} {2}(\left\Vert W_{A_1} \right\Vert^2+\mu\left\Vert W_{A_2} \right\Vert^2)+C_{A_1}(e’\xi^{A_1})+C_{A_2}(e’\xi^{A_2})+C(e’\eta)<br>$$</p>
+<p>$$<br>s.t.  \enspace\enspace\enspace\enspace |[[&lt;W_{A_1},\Phi_{A_1}&gt;]]<em>l^r-[[&lt;w_{A_2}&gt;,\Phi</em>{A_2}]]_l^r |\le \eta+e\epsilon,<br>$$</p>
+<p>$$<br>D_1&lt;W_{A_1},\Phi_{A_1}&gt;+\xi^{A_1} \ge e,<br>$$</p>
+<p>$$<br>D_2&lt;W_{A_2},\Phi_{A_2}&gt;+\xi^{A_2} \ge e,<br>$$</p>
+<p>$$<br>[[\xi^{A_1}]]_l^r \ge [[D_2&lt;W_{A_2,\Phi_{A_2}}&gt;]]_l^r,<br>$$</p>
+<p>$$<br>[[\xi^{A_2}]]<em>l^r \ge [[D_1&lt;W_{A_1,\Phi_{A_1}}&gt;]]<em>l^r,<br>$$<br>$$<br>\xi^{A_1},\xi^{A_2},\eta \ge 0,<br>$$<br>According to the represent theorem [43], the solution of the optimization problem (3) can be formulated as<br>$$ W</em>{A_k} &#x3D; \sum</em>{n&#x3D;1}^N v_{A_k}^{j} \phi_{k} (X_{j}^{A_k}) $$.<br>Then problem (3) can be rewritten as follows.</p>
+<p>$$<br>\mathop{min}\limits_{v_{A_1},v_{A_2},\xi^{A_1},\xi^{A_2},\eta}<br>\enspace \enspace \enspace \enspace<br>\frac{1} {2}(\sum_{i&#x3D;1}^{m_1}\sum_{j&#x3D;1}^{m_1} v_{A_1}^i v_{A_1}^j K_{A_1}(X_{i}^{A_1},X_{j}^{A_1})+\mu \sum_{i-1}^{m_2}\sum_{j-1}^{m_2} v_{A_2}^i v_{A_2}^j K_{A_2}(X_i^{A_2},X_j^{A_2}))+C_{A_1}(e’\xi^{A_1})+C_{A_2}(e’\xi^{A_2})+C(e’\eta)<br>$$</p>
+<p>$$<br>s.t.<br>\enspace \enspace \enspace \enspace<br>|[[K_{A_1}(A_1,A_1’)v_{A_1}]]<em>l^r-[[K</em>{A_2}(A_2,\overline{A_2’}v_{A_2})]]| \le \eta + e \epsilon<br>$$</p>
+<p>$$<br>D_1 K_{A_1}(A_1,A_1’)v_{A_1}+\xi^{A_1} \ge e,<br>$$<br>$$<br>D_2 K_{A_2}(A_2,A_2’)v_{A_2}+\xi^{A_2} \ge e,<br>$$</p>
+<p>$$<br>[[\xi^{A_1}]]<em>l^r \ge [[D_2(K</em>{A2,A_2’}v_{A_2})]]_l^r<br>$$</p>
+<p>$$<br>[[\xi^{A_2}]]<em>l^r \ge [[D_1(K</em>{A1,A_1’}v_{A_1})]]_l^r<br>$$</p>
+<p>$$<br>\xi^{A_1},\xi^{A_2},\eta \ge 0.<br>$$</p>
+<p><em><strong>RPSVM-2V</strong></em>(*****)</p>
+<p>Formally, RPSVM-2V can be built as follows.</p>
+<p>$$<br>\mathop{min}\limits_{v_{A_1},v_{A_2},\xi^{A_1},\xi^{A_2},\eta}<br>\enspace \enspace \enspace \enspace<br>\frac{1} {2}(\widetilde{v_{A_1}’}\widetilde{v_{A_1}}+\mu\widetilde{v_{A_2}’}\widetilde{v_{A_2}})+C_{A_1}(e’\xi^{A_1})+C_{A_2}+C(e’\eta)<br>$$</p>
+<p>$$<br>D_1 \widetilde{K_{A_1}}(A_1,\overline{A_1}’)\widetilde{v_{A_1}}+\xi^{A_1} \ge e,<br>$$<br>$$<br>D_2 \widetilde{K_{A_2}}(A_2,\overline{A_2}’)\widetilde{v_{A_2}}+\xi^{A_2} \ge e,<br>$$</p>
+<p>$$<br>[[\xi^{A_1}]]<em>l^r \ge [[D_2 \widetilde{K</em>{A_2}}(A_2,\overline{A_2’})\widetilde{v_{A_2}}]]_l^r<br>$$</p>
+<p>$$<br>[[\xi^{A_2}]]<em>l^r \ge [[D_1 \widetilde{K</em>{A_1}}(A_1,\overline{A_1’})\widetilde{v_{A_1}}]]_l^r<br>$$<br>$$<br>\xi^{A_1},\xi^{A_2},\eta \ge 0.<br>$$</p>
+<p>$\underline{\text{03. Theoretical analysis }}$</p>
+<ul>
+<li>generalization error bound</li>
+<li>Generalized performance</li>
+<li>parameter study</li>
+</ul>
+<p>In this section, proof and algorithm are stated in detial for the final expriment output.</p>
+<p>$\underline{\text{03. Exprimental Conclusions }}$</p>
+<p>In this paper, we propose a new model RPSVM-2V by integrating RSVM with PSVM-2V in incomplete- and complete-view<br>scenarios. RPSVM-2V can not only fully leverage all available information for the incomplete views case, but also achieve<br>comparable performance with less computation and storage cost in the complete-view setting. </p>
+
+      </div>
+    </div>
+</div>
+
+<div class="post-category">
+
+    <div id="p-meta-i">
+        
+              
+                <a class="hover-with-bg" href="/categories/Artificial-Intelligence/">Artificial Intelligence</a>
+              
+          
+          
+              
+                <a class="hover-with-bg" href="/tags/Kernel-Learning/"># Kernel_Learning</a>
+              
+          
+    </div>
+</div>
+
+
+<div class="post-footer">
+  
+
+  <div class="post-copyright">
+    <p style="margin: 5px 0;">文章作者：<a href="/">Zhang Wenfan</a></p>
+    <p style="margin: 5px 0;">文章链接：<a href="http://example.com/2022/06/08/KernelLearning/">http://example.com/2022/06/08/KernelLearning/</a></p>
+    <p style="margin: 5px 0;">版权声明：本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处，谢谢。</p>
+  </div>
+  
+</div>
+
+    <!-- Comments -->
+    <div class="comments">
+        
+        <!-- Detalk.js https://detalk.js.org/ -->
+
+    <div id="miracle-comments">
+        <div id="detalk">
+            <div style="width: 100%; text-align: center; display: flex; justify-content: center; align-items: center;">
+                <svg width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><g><animateTransform attributeName="transform" type="rotate" values="0 33 33;270 33 33" begin="0s" dur="1.4s" fill="freeze" repeatCount="indefinite"></animateTransform>
+                    <circle fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30" stroke-dasharray="187" stroke-dashoffset="610"><animate attributeName="stroke" values="#4285F4;#DE3E35;#F7C223;#1B9A59;#4285F4" begin="0s" dur="5.6s" fill="freeze" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" values="0 33 33;135 33 33;450 33 33" begin="0s" dur="1.4s" fill="freeze" repeatCount="indefinite"></animateTransform><animate attributeName="stroke-dashoffset" values="187;46.75;187" begin="0s" dur="1.4s" fill="freeze" repeatCount="indefinite"></animate>
+                </circle></g></svg>
+            </div>
+        </div>
+    </div>
+    <style>
+        .comment-title h3 {
+            font-size: 1.25rem;
+        }
+        .detalk-container .input-label label {
+            width: 30% !important;
+        }
+        .detalk-container .input-data .input-area input {
+            width: 70% !important;
+        }
+    </style>
+    <script>
+        function loadComment() {
+            try {
+                loadScriptFile({
+                    url: "https://cdn.jsdelivr.net/npm/@detalk/static@1.3.1/dist/detalk.js",
+                    loadType: "async",
+                    cb: () => {
+                        detalk.init({"url":"","el":"#detalk","label":{"admin":{"name":"博主","class":"label-green"}},"recaptchaSiteKey":null,"login":{"github":null},"owo":null});
+                    },
+                });
+            } catch (e) {
+                document.getElementById("loadCommentBtn").innerText = "无法加载 Detalk.js 评论";
+                console.info(e);
+            }
+        }
+        function loadDetalk() {
+            try {
+                loadComment();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        var runningOnBrowser = typeof window !== "undefined";
+
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var observer = new IntersectionObserver(function(entries) {
+                if (entries[0].isIntersecting) {
+                    loadDetalk();
+                    observer.disconnect();
+                }
+                }, { threshold: [0] });
+                observer.observe(document.getElementById('miracle-comments'));
+            } else {
+                loadDetalk();
+            }
+        }, 1);
+    </script>
+
+
+    </div>
+
+</article>
+
+
+        </div>
+        
+<footer class="text-center">
+    
+    
+    
+    
+    
+    <p>&copy;  2020 - 2021&nbsp;&nbsp;Theme Miracle</p>
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme by <a href="https://github.com/oCoke/hexo-theme-miracle" target="_blank">Miracle</a></p>
+    
+    
+</footer>
+
+<div class="p-btn">
+    
+        <a class="toc-btn" id="toc-btn"><i id="i-menu"></i></a>
+    
+    
+      <a class="toc-btn" id="share-btn"><i>
+        <svg t="1670124379155" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2683" width="25" height="25"><path d="M395.946667 234.666667v64H256v469.333333h512V522.666667h64V768a64 64 0 0 1-64 64H256a64 64 0 0 1-64-64V298.666667a64 64 0 0 1 64-64h139.946667z m335.850666-87.914667l150.848 150.826667-158.378666 158.4-45.269334-45.248L748.394667 341.333333H672c-121.685333 0-220.714667 97.024-223.914667 217.941334L448 565.333333v85.333334h-64v-85.333334C384 406.272 512.938667 277.333333 672 277.333333h99.861333l-85.312-85.333333 45.248-45.248z" p-id="2684" fill="var(--first-text-color)"></path></svg>
+      </i></a>
+    
+    <a href="javascript:window.scrollTo({top:0,behavior:'smooth'});" class="click-btn">
+      <i id="i-up"></i>
+    </a>
+</div>
+
+<!-- SCRIPTS -->
+
+
+
+
+
+
+<script>
+    document.getElementById("btn-dropdown").addEventListener('click', () => {
+      toggleClass("#dropdown-menus","display-inline");
+    });
+    console.log('\n' + ' %c Powered by Hexo Theme Miracle ' + ' %c https://github.com/oCoke/hexo-theme-miracle ' + '\n' + '\n', 'color: #fff; background: #4F9BFA; padding:5px 0;', 'background: #FFF; padding:5px 0;');
+
+    
+
+    
+  /* 小彩蛋: 饮茶先啦 */
+  setTimeout(() => {
+    var time = new Date();
+    if (time.getHours() == 15) {
+      let comment = document.createComment(' 三点几嚟！饮茶先啦！ ');
+      document.body.insertBefore(comment, document.getElementsByTagName('header')[0]);
+    }
+  },1);
+    
+</script>
+
+
+<script>
+    var postImg = document.querySelectorAll("article[class=page] img");
+    for (let imgi = 0; imgi < postImg.length; imgi++) {
+        postImg[imgi].onclick = () => {
+            let zoomImg = document.createElement("div");
+            zoomImg.id = "zoomImg";
+            zoomImg.innerHTML = `<div id="zoom-picture"></div>
+    <div class="poptrox-overlay"
+        style="position: fixed; left: 0px; top: 0px; z-index: 20000; width: 100%; height: 100%; text-align: center; cursor: zoom-out; opacity: 1;">
+        <div style="display:inline-block;height:100%;vertical-align:middle;"></div>
+        <div
+            style="position:absolute;left:0;top:0;width:100%;height:100%;background:#000000;opacity:0;filter:alpha(opacity=0);">
+        </div>
+        <div class="poptrox-popup"
+            style="display: inline-block; vertical-align: middle; position: relative; z-index: 1; cursor: zoom-out; min-width: 10px; min-height: 10px; width: auto; height: auto;">
+            <div class="loader" style="display: none;"></div>
+            <div class="pic" style="text-indent: 0px;"><img
+                    src="${ postImg[imgi].srcset || postImg[imgi].src }" alt="Loading..."
+                    style="vertical-align: bottom; max-width: 85vw; max-height: 85vh;"></div>
+        </div>
+    </div>`;
+            document.body.appendChild(zoomImg);
+                document.querySelector("#zoomImg").onclick = () => {
+                    document.querySelector("#zoomImg").remove();
+                }
+        }
+    }
+    
+</script>
+
+
+
+
+    <script>
+        query("#toc-btn")[0].onclick = () => {
+            if (query(".post-toc")[0].innerHTML) {
+                toggleClass(".post-toc", "display-inline");
+            }
+        }
+
+        if (!query(".post-toc")[0].innerHTML) {
+            addClass("#toc-btn","display-none");
+        }
+    </script>
+
+
+
+    <script>
+        query("#share-btn")[0].onclick = async () => {
+            let url = `${location.protocol}//${location.hostname}${location.port ? ":"+location.port:location.port}${location.pathname}#read=${sessionStorage.getItem(location.pathname+"_read_y") || ""}`;
+            try {
+                await navigator.clipboard.writeText(url);
+                prompt_core("分享链接已经复制至剪贴板", 4800, true);
+            } catch(e) {
+                prompt_core("分享链接复制失败，请手动复制<br/>"+url, 4800, false);
+            }
+        }
+    </script>
+
+
+
+
+
+
+
+    <script>
+        const getScrollPosition = (el = window) => ({
+            x: el.pageXOffset !== undefined ? el.pageXOffset : el.scrollLeft,
+            y: el.pageYOffset !== undefined ? el.pageYOffset : el.scrollTop
+        });
+        // 此处的 750 是「页面元素的最大宽度」
+        var wx = document.getElementsByClassName("article-m")[0].clientWidth;
+        var wy = document.getElementsByClassName("article-m")[0].clientHeight;
+        function windowScroll() {
+            // 反复修改 确保页面尺寸不改变
+            wx = document.getElementsByClassName("article-m")[0].clientWidth;
+            wy = document.getElementsByClassName("article-m")[0].clientHeight;
+            let y = Math.round(getScrollPosition().y);
+            // console.log(y);
+            // 组合字符串，同时记录页面坐标，页面宽度和高度
+            let p = `${y}:${wx}:${wy}`;
+            // 写入到 sessionStorage 中
+            sessionStorage.setItem(location.pathname + "_read_y", p);
+        }
+        // URL 中是否包含传递的坐标信息
+        setTimeout(() => {
+            if (location.hash.split("#read=").length > 1) {
+                prompt_core("已有阅读进度，正在跳转", 4800, true);
+                // 分离字符串
+                let read_y = location.hash.split("#read=")[1];
+                read_y = read_y.split(":");
+                // 组合乘积，顺滑移动至坐标
+                window.scrollTo({top: Math.round(Number(read_y[0]) * Number(read_y[1] * Number(read_y[2] / wx / wy))), behavior: "smooth"});
+            } else {
+                // 从 sessionStorage 中获取
+                let read_y = sessionStorage.getItem(location.pathname + "_read_y") || "0:0:0";
+                read_y = read_y.split(":");
+                if (read_y[0] != "0") prompt_core("已有阅读进度，正在跳转", 4800, true);
+                window.scrollTo({top: Math.round(Number(read_y[0]) * Number(read_y[1] * Number(read_y[2] / wx / wy))), behavior: "smooth"});
+            }
+        }, 500);
+        window.onscroll = windowScroll;
+    </script>
+
+
+
+
+
+        </div>
+        <div id="css-loading">
+            <h3 class="text-center">加载中...</h3>
+        </div>
+        
+    </body>
+</html>
