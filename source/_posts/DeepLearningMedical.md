@@ -31,7 +31,7 @@ $\underline{\text{00. Themes and Topics}}$
 
 
 $$
-\mathscr{L}= \mathop{min}\limits_{\theta} \frac{1} {N} \sum_{i=1}^N(y_i', y_i)
+\mathscr{L}= \mathop{min}\limits_{\theta} \frac{1} {N} \sum_{i=1}^N(y_i',y_i)
 $$
 
 *Weakly Supervised Learning*
