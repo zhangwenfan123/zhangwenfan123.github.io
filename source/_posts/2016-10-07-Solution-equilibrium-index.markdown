@@ -6,8 +6,6 @@ categories: Algorithm
 tags: Equilibrium Index O(N) 
 comments: false
 ---
-* content
-{:toc}
 
 In this blog, I gave the solution of Equilibrium Index Problem (O(N)) in Three Languages.
  <!--more-->

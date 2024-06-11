@@ -134,3 +134,6 @@ mathjax:
   normal_width: 0.6 # relative normal (monospace) width
   append_css: true # add CSS to pages rendered by MathJax
   every_page: true # if true, every page will be rendered by MathJax regardless the `mathjax` setting in Front-matt
+
+toc:
+  maxdepth: 3   
