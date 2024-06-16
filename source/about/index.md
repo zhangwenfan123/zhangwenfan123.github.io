@@ -19,10 +19,10 @@ copyrightText:
 
 ## Education
 ### University of Chinese Academy of Science
->Master's Degree, BA-Business Administration
+>Master's Degree, BA-Business Administration(Affective computing)
 
 ### University of Chinese Academy of Science
->Master's Degree, Sc-Applied Psychology
+>Master's Degree, Sc-Applied Psychology(Artificial intelligence)
 
 ### Peking University
 >Master's Degree, CS-Computer Science
@@ -33,6 +33,12 @@ copyrightText:
 ---
 
 ## Working Experience
+
+### Investment Manager
+Taicang Science and Technology Bureau.(Suzhou)
+
+>May 2023 -now : As investment manager, responsible for high-tech industry investment attraction.
+
 ### Head of R&D
 Tsinghua Tongfang Knowledge Network Technology Co., Ltd. (Beijing)
 
