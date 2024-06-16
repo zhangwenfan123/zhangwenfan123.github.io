@@ -8,15 +8,15 @@
     <link rel="apple-touch-icon" sizes="76x76" href="/null">
     <link rel="icon" type="image/png" href="/null">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-    <title>About Zhang Wenfan - 博学笃志 格物明德</title>
+    <title>Solution of Equilibrium Index Problem in O(N) - 博学笃志 格物明德</title>
     
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     
     
-    <meta name="description" content="">
+    <meta name="description" content="&lt;p&gt;In this blog, I gave the solution of Equilibrium Index Problem (O(N)) in Three Languages.&lt;br&gt;">
     <meta name="author" content="Zhang Wenfan">
     <meta name="keywords" content="">
-    <meta property="og:title" content="About Zhang Wenfan"/>
+    <meta property="og:title" content="Solution of Equilibrium Index Problem in O(N)"/>
     <style>
 
 
@@ -561,58 +561,81 @@ mjx-container[display="true"] + br {
 
 <article class="page">
 <div id="post-meta-m">
-        <h3>About Zhang Wenfan</h3>
+    <div class="post-meta" id="post-meta">
+  <h3>Solution of Equilibrium Index Problem in O(N)</h3>
+    
+      <span class="post-meta-label">
+        Zhang Wenfan
+      </span>
+    
+    
+      <span class="post-meta-label">
+        <span class="p-dot"></span>
+        <time datetime="2016-10-07 23:00" pubdate>
+          2016-10-07
+        </time>
+      </span>
+    
+    
+    
+    
+  </div>
+  
 </div>
 <div class="article-m">
-    <div class="post-toc">
-        
-    </div>
-    <div id="article" class="markdown-body textretty">
-        <h2 id="Brief-Introduction"><a href="#Brief-Introduction" class="headerlink" title="Brief Introduction"></a>Brief Introduction</h2><blockquote>
-<p>My journey starts from formal language theory and automata.</p>
-</blockquote>
-<blockquote>
-<p>Currently exploring the essence of language and technology. </p>
-</blockquote>
-<blockquote>
-<p>Believe in predicting future by shaping it, technologically and economically. </p>
-</blockquote>
-<hr>
-<h2 id="Education"><a href="#Education" class="headerlink" title="Education"></a>Education</h2><h3 id="University-of-Chinese-Academy-of-Science"><a href="#University-of-Chinese-Academy-of-Science" class="headerlink" title="University of Chinese Academy of Science"></a>University of Chinese Academy of Science</h3><blockquote>
-<p>Master’s Degree, BA-Business Administration(Affective computing)</p>
-</blockquote>
-<h3 id="University-of-Chinese-Academy-of-Science-1"><a href="#University-of-Chinese-Academy-of-Science-1" class="headerlink" title="University of Chinese Academy of Science"></a>University of Chinese Academy of Science</h3><blockquote>
-<p>Master’s Degree, Sc-Applied Psychology(Artificial intelligence)</p>
-</blockquote>
-<h3 id="Peking-University"><a href="#Peking-University" class="headerlink" title="Peking University"></a>Peking University</h3><blockquote>
-<p>Master’s Degree, CS-Computer Science</p>
-</blockquote>
-<h3 id="Anhui-Science-and-Technology-University"><a href="#Anhui-Science-and-Technology-University" class="headerlink" title="Anhui Science and Technology University"></a>Anhui Science and Technology University</h3><blockquote>
-<p>Bachelor’s Degree, BA-Linguistics</p>
-</blockquote>
-<hr>
-<h2 id="Working-Experience"><a href="#Working-Experience" class="headerlink" title="Working Experience"></a>Working Experience</h2><h3 id="Investment-Manager"><a href="#Investment-Manager" class="headerlink" title="Investment Manager"></a>Investment Manager</h3><p>Taicang Science and Technology Bureau.(Suzhou)</p>
-<blockquote>
-<p>May 2023 -now : As investment manager, responsible for high-tech industry investment attraction.</p>
-</blockquote>
-<h3 id="Head-of-R-D"><a href="#Head-of-R-D" class="headerlink" title="Head of R&D"></a>Head of R&amp;D</h3><p>Tsinghua Tongfang Knowledge Network Technology Co., Ltd. (Beijing)</p>
-<blockquote>
-<p>Apr 2017- Aug 2021 : As Head of R&amp;D Dept, in charge of R&amp;D of certain products.</p>
-</blockquote>
-<h3 id="Senior-SDE"><a href="#Senior-SDE" class="headerlink" title="Senior SDE"></a>Senior SDE</h3><p>Autohome.com(NYSE:ATHM)</p>
-<blockquote>
-<p>2016-2017 : As backend developer, responsible for the backend and service development for the Mobile Product.</p>
-</blockquote>
-<h3 id="Software-Engineer"><a href="#Software-Engineer" class="headerlink" title="Software Engineer"></a>Software Engineer</h3><p>Fang.com(NYSE:SFUN) etc.</p>
-<blockquote>
-<p>2012-2016 : Experienced as operation engineer and backend developer for the data center of the internal business system.</p>
-</blockquote>
+  <div class="post-toc">
+    
+      
+    
+  </div>
+    <div id="article">
+      <div id="post-content" class="markdown-body textretty">
+        <p>In this blog, I gave the solution of Equilibrium Index Problem (O(N)) in Three Languages.<br> <span id="more"></span></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">	<span class="comment">//平衡索引算法-java</span></span><br><span class="line">	<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">solution</span><span class="params">(<span class="type">int</span>[] arr)</span>{</span><br><span class="line"></span><br><span class="line">	       <span class="type">int</span> sumright=<span class="number">0</span>;</span><br><span class="line">	       <span class="type">int</span> sumleft=<span class="number">0</span>;</span><br><span class="line">	       <span class="type">int</span> index=<span class="number">0</span>;</span><br><span class="line">	       <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;arr.length;i++){</span><br><span class="line">	       sumright+=arr[i];</span><br><span class="line">	       }  </span><br><span class="line"></span><br><span class="line">	       <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;arr.length;i++){</span><br><span class="line">		       sumleft+=arr[i];</span><br><span class="line">		       sumright-=arr[i];</span><br><span class="line">		       <span class="keyword">if</span>(sumleft==sumright){</span><br><span class="line">			       <span class="keyword">return</span> i;</span><br><span class="line">			       }<span class="keyword">else</span> <span class="keyword">if</span>(sumleft&gt;sumright){</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">			       }</span><br><span class="line">	       }</span><br><span class="line">	       <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"><span class="comment">//在主方法中调用：</span></span><br><span class="line"><span class="type">int</span>[] arr={<span class="number">5</span>,<span class="number">7</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">7</span>,<span class="number">2</span>};</span><br><span class="line">System.out.print(<span class="keyword">new</span> <span class="title class_">Solution</span>().solution(arr));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="comment">#平衡索引算法-python</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">slotion</span>(<span class="params">self,arr</span>):</span><br><span class="line">        sumleft = <span class="number">0</span></span><br><span class="line">        sumright = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> arr:</span><br><span class="line">            sumright = sumright + item</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> arr:</span><br><span class="line">            sumleft = sumleft + item</span><br><span class="line">            sumright = sumright - item</span><br><span class="line">            <span class="keyword">if</span> sumleft == sumright:</span><br><span class="line">                <span class="keyword">return</span> arr.index(item)</span><br><span class="line">            <span class="keyword">elif</span> sumleft &gt; sumright:</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#arr=[5,7,1,1,4,3,5,2]</span></span><br><span class="line"><span class="comment">#print(Solution().slotion(arr))</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">algorithm</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span></span><br><span class="line">    {</span><br><span class="line">        <span class="comment">//平衡索引算法-c#</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">int</span> <span class="title">solution</span>(<span class="params"><span class="built_in">int</span>[] arr</span>)</span></span><br><span class="line">        {</span><br><span class="line">            <span class="built_in">int</span> sumright = <span class="number">0</span>;</span><br><span class="line">            <span class="built_in">int</span> sumleft = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; arr.Count(); i++)</span><br><span class="line">            {</span><br><span class="line">                sumright += arr[i];</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; arr.Count(); i++)</span><br><span class="line">            {</span><br><span class="line">                sumleft += arr[i];</span><br><span class="line">                sumright -= arr[i];</span><br><span class="line">                <span class="keyword">if</span> (sumleft == sumright)</span><br><span class="line">                {</span><br><span class="line">                    <span class="keyword">return</span> i;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (sumleft &gt; sumright)</span><br><span class="line">                {</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="comment">//在主方法中调用：</span></span><br><span class="line"><span class="built_in">int</span>[] arr={<span class="number">5</span>,<span class="number">7</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">7</span>,<span class="number">2</span>};</span><br><span class="line">Console.WriteLine(<span class="keyword">new</span> Solution().solution(arr));</span><br><span class="line">Console.Read();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      </div>
     </div>
 </div>
 
-</article>
+<div class="post-category">
 
+    <div id="p-meta-i">
+        
+              
+                <a class="hover-with-bg" href="/categories/Algorithm/">Algorithm</a>
+              
+          
+          
+              
+                <a class="hover-with-bg" href="/tags/Equilibrium-Index-O-N/"># Equilibrium Index O(N)</a>
+              
+          
+    </div>
+</div>
+
+
+<div class="post-footer">
+  
+
+  <div class="post-copyright">
+    <p style="margin: 5px 0;">文章作者：<a href="/">Zhang Wenfan</a></p>
+    <p style="margin: 5px 0;">文章链接：<a href="https://zhangwenfan123.github.io/2016/10/07/2016-10-07-Solution-equilibrium-index/">https://zhangwenfan123.github.io/2016/10/07/2016-10-07-Solution-equilibrium-index/</a></p>
+    <p style="margin: 5px 0;">版权声明：本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处，谢谢。</p>
+  </div>
+  
+</div>
+
+    <!-- Comments -->
+    <div class="comments">
+        
+        
+    </div>
+
+</article>
 
 
         </div>
@@ -631,6 +654,8 @@ mjx-container[display="true"] + br {
 </footer>
 
 <div class="p-btn">
+    
+        <a class="toc-btn" id="toc-btn"><i id="i-menu"></i></a>
     
     
       <a class="toc-btn" id="share-btn"><i>

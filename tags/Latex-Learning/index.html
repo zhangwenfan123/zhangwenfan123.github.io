@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 
 
 <head>
@@ -8,13 +8,13 @@
     <link rel="apple-touch-icon" sizes="76x76" href="/null">
     <link rel="icon" type="image/png" href="/null">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-    <title>Tags - Latex_Learning - Hexo</title>
+    <title>Tags - Latex_Learning - 博学笃志 格物明德</title>
     
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     
     
     <meta name="description" content="">
-    <meta name="author" content="John Doe">
+    <meta name="author" content="Zhang Wenfan">
     <meta name="keywords" content="">
     <meta property="og:title" content="Tags - Latex_Learning"/>
     <style>
@@ -366,13 +366,125 @@ header .header__right .dropdown-menus .dropdown-menu {
     
     <script src="/js/main.js"></script>
     
-<meta name="generator" content="Hexo 7.2.0"></head>
+<meta name="generator" content="Hexo 7.2.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
 
     <body>
         <header>
             
 <div class="header__left">
-	<a href="/" class="button"><span class="logo__text">Theme Miracle</span></a>
+	<a href="/" class="button"><span class="logo__text">正是修行时</span></a>
 </div>
 <div class="header__right">
 	<div class="navbar__menus">
@@ -385,20 +497,8 @@ header .header__right .dropdown-menus .dropdown-menu {
 			<div class="navbar-menu">归档</div>
 		</a>
 		
-		<a href="/categories/" class="button">
-			<div class="navbar-menu">分类</div>
-		</a>
-		
-		<a href="/tags/" class="button">
-			<div class="navbar-menu">标签</div>
-		</a>
-		
-		<a href="/talk/" class="button">
-			<div class="navbar-menu">说说</div>
-		</a>
-		
-		<a href="/links/" class="button">
-			<div class="navbar-menu">友链</div>
+		<a href="/record/" class="button">
+			<div class="navbar-menu">记录</div>
 		</a>
 		
 		<a href="/about/" class="button">
@@ -444,16 +544,7 @@ header .header__right .dropdown-menus .dropdown-menu {
 		<a href="/archives/" class="dropdown-menu button">归档</a>
 		<br>
 		
-		<a href="/categories/" class="dropdown-menu button">分类</a>
-		<br>
-		
-		<a href="/tags/" class="dropdown-menu button">标签</a>
-		<br>
-		
-		<a href="/talk/" class="dropdown-menu button">说说</a>
-		<br>
-		
-		<a href="/links/" class="dropdown-menu button">友链</a>
+		<a href="/record/" class="dropdown-menu button">记录</a>
 		<br>
 		
 		<a href="/about/" class="dropdown-menu button">关于</a>
@@ -559,5 +650,20 @@ header .header__right .dropdown-menus .dropdown-menu {
             <h3 class="text-center">加载中...</h3>
         </div>
         
-    </body>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
 </html>
