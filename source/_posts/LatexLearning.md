@@ -9,6 +9,7 @@ authorURL:
 url: 
 copyrightText: 
 comment: true
+mathjax: true
 ---
 
 ### 本文主要对Latex在Markdown中的渲染语法进行学习和熟悉
@@ -75,11 +76,13 @@ $$
 ```
 
 $$
-a^2,a_1,\\
-x^{y+z},p_{ij}\\--用大括号包裹多项式\\
+a^2,a_1,
+x^{y+z},p_{ij} 
+--用大括号包裹多项式\\
 $$
 $$
-x_i,x_{\rm i},x_{\text i}--下标是斜体还是直立体的i\\
+x_i,x_{\rm i},x_{\text i}
+--下标是斜体还是直立体的i\\
 $$
 $$
 \text{A B},\rm{A B}--text和rm的区别\\
@@ -98,38 +101,64 @@ $$
 
 ```latex
 $$
-分式：\\
---语法为  \frac{分子} {分母}
+分式语法：
+$$
+$$
+\frac{分子} {分母} 
+$$
+$$
 \frac{1} {2}, \frac1 2 \\
 \frac{1} {x+y} \\
-\frac{\frac1 x + 1} {y+1}--嵌套分式\\
-\frac{\dfrac1 x + 1} {y+1}\\
---分子中的1/x较小，改为dfrac(display-style)调整格式\\
-----------------------\\
-根式:\\
---语法为  \sqrt[根指数-开n次方根]{根底数}
+$$
+$$
+嵌套分式：
+$$
+$$
+\frac{\frac{1} x + 1} {y+1}
+$$
+$$
+分子中的1/x较小，改为dfrac(display-style)调整格式\
+$$
+$$
+\frac{\dfrac1 x + 1} {y+1}
+$$
+$$
+根式: 
+\sqrt[n]{root} 
+$$
+$$
 \sqrt 2,\sqrt{x+y}\\
+$$
+$$
 \sqrt[n]{2}---n次方根
 $$
 ```
+
 $$
-分式：\\
---语法为  \frac{分子} {分母} 
+分式语法：
+$$
+$$
+\frac{分子} {分母} 
 $$
 $$
 \frac{1} {2}, \frac1 2 \\
 \frac{1} {x+y} \\
 $$
 $$
-\frac{\frac{1} x + 1} {y+1}--嵌套分式\\
+嵌套分式：
 $$
 $$
-\frac{\dfrac1 x + 1} {y+1}\\
---分子中的1/x较小，改为dfrac(display-style)调整格式\\
+\frac{\frac{1} x + 1} {y+1}
 $$
 $$
-根式:\\--语法为  
-\sqrt[根指数-开n次方根]{根底数}  
+分子中的1/x较小，改为dfrac(display-style)调整格式\
+$$
+$$
+\frac{\dfrac1 x + 1} {y+1}
+$$
+$$
+根式: 
+\sqrt[n]{root} 
 $$
 $$
 \sqrt 2,\sqrt{x+y}\\
@@ -196,23 +225,25 @@ $$
 ```
 
 $$
-\cdots,\vdots,\ddots\\
+\cdots,\vdots,\ddots
 $$
 $$
-\infty,\partial,\nabla,\propto,\degree\\
+\infty,\partial,\nabla,\propto,\degree
 $$
 $$
-\sin x,\sec x,\cosh x\\
+\sin x,\sec x,\cosh x
 $$
 $$
-\log_2 x,\ln x,\lg x\\
+\log_2 x,\ln x,\lg x
 $$
 $$
-\lim_{x \to 0} \frac {sinx} {x}\\
+\lim_{x \to 0} \frac {sinx} {x}
 $$
 $$
-\lim\limits_{x \to 0} \frac {sinx} {x}\\
-加入limits，则x \to0的角标在lim的下方
+\lim\limits_{x \to 0} \frac {sinx} {x}
+$$
+$$
+加入limits，则x \to 0的角标在lim的下方
 $$
 
 + **第六部分：大型运算符**
@@ -220,15 +251,30 @@ $$
 ```latex
 $$
 \sum,\prod\\
+$$
+$$
 \sum_{i=0}^N,\prod_{i=0}^N\\
+$$
+$$
 \frac{\sum_{i=0}^N} {\prod_{i=0}^N}\\
-这里上下限均现实在求和求积的右侧的，如果想显示在上下侧需要加入limits限定如下\\
+$$
+这里上下限均现实在求和求积的右侧，若显示在上下侧需要加入limits限定如下
+$$
 \frac{\sum\limits_{i=0}^N} {\prod\limits_{i=0}^N}\\
-----------------------\\
-\int,\iint,\iiint\\
-\oint,\oiint\\
-\int_{-\infty}^0 f(x)dx\\
-但在严谨场合dx中的d为直立体，且与被积函数应该拉开一段小间隔)\\
+$$
+$$
+\int,\iint,\iiint,\oint,\oiint,\oiiint
+$$
+$$
+此处曲面积分和球面积分无法正确渲染，问题待解决
+$$
+$$
+\int_{-\infty}^0 f(x)dx
+$$
+$$
+但在严谨场合dx中的d为直立体，且与被积函数应该拉开一段小间隔
+$$
+$$
 \int_{-\infty}^0 f(x) \, \text dx\\
 $$
 ```
@@ -241,60 +287,90 @@ $$
 $$
 \frac{\sum_{i=0}^N} {\prod_{i=0}^N}\\
 $$
-$$
-这里上下限均现实在求和求积的右侧的，如果想显示在上下侧需要加入limits限定如下\\
-$$
+这里上下限均现实在求和求积的右侧，若显示在上下侧需要加入limits限定如下
 $$
 \frac{\sum\limits_{i=0}^N} {\prod\limits_{i=0}^N}\\
 $$
 $$
-\int,\iint,\iiint\\
-\oint, 
-此处二重围道积分无法正确渲染，问题待解决
-\oiint\\
+\int,\iint,\iiint,\oint,\oiint,\oiiint
 $$
 $$
-\int_{-\infty}^0 f(x)dx\\
-但在严谨场合dx中的d为直立体，且与被积函数应该拉开一段小间隔)\\
+此处曲面积分和球面积分无法正确渲染，问题待解决
+$$
+$$
+\int_{-\infty}^0 f(x)dx
+$$
+$$
+但在严谨场合dx中的d为直立体，且与被积函数应该拉开一段小间隔
 $$
 $$
 \int_{-\infty}^0 f(x) \, \text dx\\
 $$
 
-+ **第六部分：标注符号、箭头、定界符**
++ **第七部分：标注符号、箭头、定界符**
 
 ```latex
 $$
-标注符号：\\
-\vec x,\overrightarrow x,\overrightarrow {AB}  --上面一个右箭头\\
+标注符号：
+$$
+$$
+\vec x,\overrightarrow x,\overrightarrow {AB}  --上面一个右箭头
+$$
+$$
 \bar x,\overline x,\overline {AB} --上面一个横线\\
----------------\\
-箭头：\\
+$$
+$$
+箭头:
+$$
+$$
 \leftarrow,\rightarrow--单箭头\\
+$$
+$$
 \Leftarrow,\Rightarrow--双箭头\\
+$$
+$$
 \Leftrightarrow,\longleftarrow\\
----------------\\
-括号和定界符：\\
+$$
+$$
+括号和定界符：
+$$
+$$
 (),[],\{\} \\
-大括号的左右括号要加转义\\
+$$
+$$
+大括号的左右括号要加转义
+$$
+$$
 \lceil,\rceil,\lfloor,\rfloor,||\\
 (0,\frac 1 a] \\
-高度自适应的括号：\\
+$$
+$$
+高度自适应的括号：
+$$
+$$
 \left(0,\frac 1 a \right]\\
-为了自适应竖线，构造了虚拟的左括号：\\
+$$
+$$
+为了自适应竖线，构造了虚拟的左括号：
+$$
+$$
 \left.\frac {\partial f} {\partial x}\right|_{x=0}\\
 $$
 ```
 
 $$
-标注符号：\\
-\vec x,\overrightarrow x,\overrightarrow {AB}  --上面一个右箭头\\
+标注符号：
+$$
+$$
+\vec x,\overrightarrow x,\overrightarrow {AB}  --上面一个右箭头
 $$
 $$
 \bar x,\overline x,\overline {AB} --上面一个横线\\
 $$
 $$
-箭头：\\
+箭头:
+$$
+$$
 \leftarrow,\rightarrow--单箭头\\
 $$
 $$
@@ -304,59 +380,71 @@ $$
 \Leftrightarrow,\longleftarrow\\
 $$
 $$
-括号和定界符：\\
+括号和定界符：
+$$
+$$
 (),[],\{\} \\
 $$
 $$
-大括号的左右括号要加转义\\
+大括号的左右括号要加转义
+$$
+$$
 \lceil,\rceil,\lfloor,\rfloor,||\\
 (0,\frac 1 a] \\
 $$
 $$
-高度自适应的括号：\\
+高度自适应的括号：
+$$
+$$
 \left(0,\frac 1 a \right]\\
 $$
 $$
-为了自适应竖线，构造了虚拟的左括号：\\
+为了自适应竖线，构造了虚拟的左括号：
+$$
+$$
 \left.\frac {\partial f} {\partial x}\right|_{x=0}\\
 $$
 
-+ **第七部分：多行公式和矩阵**
+
++ **第八部分：多行公式和矩阵**
 
 ```latex
 $$
 f(x)=
 \begin{cases}
-\sin x,-\pi\le x \le \pi\\
-0,\text{其他}
+\sin x,-\pi\le x \le \pi \\\0,\\\其他
 \end{cases}
 $$
+
 $$
 \begin {matrix}
-a & b & \cdots & c\\
-\vdots & \vdots & \ddots & \vdots\\
-e & f & \cdots & g\\
+a & b & \cdots & c
+\\\ \vdots & \vdots & \ddots & \vdots
+\\\ e & f & \cdots & g
 \end {matrix}
 $$
+
 $$
 \begin {bmatrix}
-a & b & \cdots & c\\
-\vdots & \vdots & \ddots & \vdots\\
-e & f & \cdots & g\\
+a & b & \cdots & c
+\\\ \vdots & \vdots & \ddots & \vdots
+\\\ e & f & \cdots & g
 \end {bmatrix}
 $$
+
 $$
 \begin {pmatrix}
-a & b & \cdots & c\\
-\vdots & \vdots & \ddots & \vdots\\
-e & f & \cdots & g\\
+a & b & \cdots & c
+\\\ \vdots & \vdots & \ddots & \vdots
+\\\ e & f & \cdots & g
 \end {pmatrix}
 $$
+
 $$
 \begin {vmatrix}
-a & b & \cdots & c\\
-\vdots & \vdots & \ddots & \vdots\\
-e & f & \cdots & g\\
+a & b & \cdots & c
+\\\ \vdots & \vdots & \ddots & \vdots
+\\\ e & f & \cdots & g
 \end {vmatrix}
 $$
 ```
@@ -364,39 +452,38 @@ $$
 $$
 f(x)=
 \begin{cases}
-\sin x,-\pi\le x \le \pi\\
-0,\text{其他}
+\sin x,-\pi\le x \le \pi \\\0,\\\其他
 \end{cases}
 $$
 
 $$
 \begin {matrix}
-a & b & \cdots & c\\
-\vdots & \vdots & \ddots & \vdots\\
-e & f & \cdots & g\\
+a & b & \cdots & c
+\\\ \vdots & \vdots & \ddots & \vdots
+\\\ e & f & \cdots & g
 \end {matrix}
 $$
 
 $$
 \begin {bmatrix}
-a & b & \cdots & c\\
-\vdots & \vdots & \ddots & \vdots\\
-e & f & \cdots & g\\
+a & b & \cdots & c
+\\\ \vdots & \vdots & \ddots & \vdots
+\\\ e & f & \cdots & g
 \end {bmatrix}
 $$
 
 $$
 \begin {pmatrix}
-a & b & \cdots & c\\
-\vdots & \vdots & \ddots & \vdots\\
-e & f & \cdots & g\\
+a & b & \cdots & c
+\\\ \vdots & \vdots & \ddots & \vdots
+\\\ e & f & \cdots & g
 \end {pmatrix}
 $$
 
 $$
 \begin {vmatrix}
-a & b & \cdots & c\\
-\vdots & \vdots & \ddots & \vdots\\
-e & f & \cdots & g\\
+a & b & \cdots & c
+\\\ \vdots & \vdots & \ddots & \vdots
+\\\ e & f & \cdots & g
 \end {vmatrix}
 $$
