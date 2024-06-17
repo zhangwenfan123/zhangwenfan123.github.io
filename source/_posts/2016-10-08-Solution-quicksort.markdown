@@ -6,8 +6,8 @@ categories: Algorithm
 tags: Sorting QuickSort BubbleSort 
 comments: false
 ---
-* content
-{:toc}
+
+
 
 题目：请手写出两种以上排序算法，并分析不同情况下复杂度的变化情况（语言不限）。
  <!--more-->

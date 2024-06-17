@@ -264,7 +264,7 @@ post:
             max_depth: 3
             # 生成 TOC 的最小深度
             # Minimum heading depth of generated toc
-            min_depth: 
+            min_depth: 1
 
     # 脚注
     # Footnote

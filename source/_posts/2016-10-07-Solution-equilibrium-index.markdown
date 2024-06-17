@@ -10,6 +10,8 @@ comments: false
 In this blog, I gave the solution of Equilibrium Index Problem (O(N)) in Three Languages.
  <!--more-->
 
+ ### The first one is writen in java
+
 ```java
 public class Solution {
 	//平衡索引算法-java
@@ -40,6 +42,8 @@ System.out.print(new Solution().solution(arr));
 
 ```
 
+ ### The second one is writen in python
+
 ```python
 class Solution:
     #平衡索引算法-python
@@ -60,6 +64,8 @@ class Solution:
 #arr=[5,7,1,1,4,3,5,2]
 #print(Solution().slotion(arr))
 ```
+
+ ### The third one is writen in c#
 
 ```c#
 namespace algorithm
