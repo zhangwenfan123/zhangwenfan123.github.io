@@ -98,7 +98,7 @@ global:
 # 搜索
 # Search
 search:
-    enable: false
+    enable: true
     # 搜索索引文件的路径，可以是相对路径或外站的绝对路径
     # Path for search index file, it can be a relative path or an absolute path.
     path: /search.json
