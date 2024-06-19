@@ -40,7 +40,7 @@ Suzhou Science and Technology Bureau.(Suzhou)
 >May 2023 -now : As investment manager, responsible for high-tech industry investment attraction.
 
 ### Head of R&D
-Tsinghua Tongfang Knowledge Network Technology Co., Ltd. (Beijing)
+Tsinghua Tongfang Knowledge Network Technology Co., Ltd.(Beijing)
 
 >Apr 2017- Aug 2021 : As Head of R&D Dept, in charge of R&D of certain products.
 
