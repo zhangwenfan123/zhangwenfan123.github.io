@@ -162,15 +162,15 @@ comments: false
         int size = numbers.length;
         for(int i = 0 ; i < size-1; i ++)
         {
-        for(int j = 0 ;j < size-1-i ; j++)
-        {
-            if(numbers[j] > numbers[j+1])  //交换两数位置
+            for(int j = 0 ;j < size-1-i ; j++)
             {
-            temp = numbers[j];
-            numbers[j] = numbers[j+1];
-            numbers[j+1] = temp;
+                if(numbers[j] > numbers[j+1])  //交换两数位置
+                {
+                temp = numbers[j];
+                numbers[j] = numbers[j+1];
+                numbers[j+1] = temp;
+                }
             }
-        }
         }
     }
 
@@ -182,16 +182,16 @@ comments: false
         int temp = numbers[low]; //数组的第一个作为中轴
         while(low < high)
         {
-        while(low < high && numbers[high] > temp)
-        {
-            high--;
-        }
-        numbers[low] = numbers[high];//比中轴小的记录移到低端
-        while(low < high && numbers[low] < temp)
-        {
-            low++;
-        }
-        numbers[high] = numbers[low] ; //比中轴大的记录移到高端
+            while(low < high && numbers[high] > temp)
+            {
+                high--;
+            }
+            numbers[low] = numbers[high];//比中轴小的记录移到低端
+            while(low < high && numbers[low] < temp)
+            {
+                low++;
+            }
+            numbers[high] = numbers[low] ; //比中轴大的记录移到高端
         }
         numbers[low] = temp ; //中轴记录到尾
         return low ; // 返回中轴的位置
