@@ -6,8 +6,6 @@ categories: Computational-Linguistics
 tags: Computational Linguistics Semantics
 comments: false
 ---
-* content
-{:toc}
 
 [语义学（Semantics）](https://en.wiktionary.org/wiki/semantics)，也作“语意学”，是一个涉及到语言学、逻辑学、计算机科学、自然语言处理、认知科学、心理学等诸多领域的一个术语。
  <!--more-->

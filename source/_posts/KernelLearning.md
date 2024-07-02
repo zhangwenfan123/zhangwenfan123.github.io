@@ -8,6 +8,7 @@ author: Zhang Wenfan
 authorURL: 
 url: 
 copyrightText: 
+mathjax: true
 ---
 
 $\underline{\text{-01. Questions}}$
@@ -30,16 +31,24 @@ $\underline{\text{00. Key Concepts and Definitions}}$
 
 >In machine learning, support-vector machines (SVMs, also support-vector networks) are supervised learning models with associated learning algorithms that analyze data for classification and regression analysis.
 
-$$
 最优参数的SVM决策函数：
-f(x)=sgn(w^{*T}x+b^*)=sgn(\sum_{n=1}^N \lambda_n^*y^n(x^n)^Tx+b^*)
+
+$$
+f(x)=\text{sgn}(w^Tx+b^*)
+$$
+
+$$
+f(x)=\text{sgn}(w^{*T}x+b^*)=\text{sgn}(\sum_{n=1}^N \lambda_n^*y^n(x^n)^Tx+b^*)
 $$
 
 在一个变换后的特征空间中，SVM的决策函数：
+
 $$
-f(x)=sgn(w^{*T}\phi(x)+b^*)=sgn(\sum_{n=1}^N \lambda_n^*y^nK(x^n,x)x+b^*)
+f(x) = sgn(w^T\phi(x)+b^*) = sgn(\sum_{n=1}^N \lambda_n^*y^nK(x^n,x)x+b^*)
 $$
+
 其中核函数（Kernel）为：
+
 $$
 K(x,z)=\phi(x)^T\phi(z)
 $$
@@ -203,7 +212,7 @@ $$
 $$
 
 $$
-s.t.  \enspace\enspace\enspace\enspace |[[<W_{A_1},\Phi_{A_1}>]]_l^r-[[<w_{A_2}>,\Phi_{A_2}]]_l^r |\le \eta+e\epsilon,
+s.t.  \enspace \enspace \enspace \enspace |[[<W_{A_1},\Phi_{A_1}>]]_l^r-[[<w_{A_2}>,\Phi_{A_2}]]_l^r |\le \eta+e\epsilon,
 $$
 
 $$
