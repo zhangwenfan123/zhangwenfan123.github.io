@@ -6,12 +6,9 @@ categories: Translation
 tags: Translation
 comments: false
 ---
-* content
-{:toc}
 
 让人工智能完美运行：我们怎么给人工智能系统赋予价值观？
  <!--more-->
-
 Keeping AI Well Behaved:How Do We Engineer An Artificial System That Has Values?
 
 
