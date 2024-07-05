@@ -14,9 +14,6 @@ tags:
 title: Tiny JavaScript Compiler
 ---
 
-* content
-{:toc}
-
 ```
 This blog is from minko_gechev, and in following content, the "I" refers to minko_gechev. And this blog inspire me in a very impressive way.
 ```
