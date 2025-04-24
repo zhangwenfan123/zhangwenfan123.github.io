@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+
+<head>
+    <meta charset="UTF-8">
+    
+    <link rel="apple-touch-icon" sizes="76x76" href="/null">
+    <link rel="icon" type="image/png" href="/null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <title>Tiny JavaScript Compiler - 博学笃志 格物明德</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    
+    
+    <meta name="description" content="&lt;figure class=&#34;highlight plaintext&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;This blog is from minko_gechev, and in following content, the &#34;I&#34; refers to minko_gechev. And this blog inspire me in a very impressive way.&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;">
+    <meta name="author" content="minko_gechev">
+    <meta name="keywords" content="">
+    <meta property="og:title" content="Tiny JavaScript Compiler"/>
+    <style>
+
+
+    
+    :root{
+        --shadow-color: rgba(0,0,0,0.2);
+        --sec-shadow: rgba(0,0,0,0.03);
+        --shadow-hover-color: rgba(0,0,0,0.28);
+        --first-text-color: #475b6d;
+        --second-text-color: #37475b;
+        --third-text-color: #858585;
+        --default-text-color: #505050;
+        --default-link-color: #007bff;
+        --link-color: #000000;
+        --second-link-color: #4F9BFA;
+        --code-color:rgba(27,31,35,.05);
+        --post-bkg-color: #fff;
+        --page-bkg-color: #f2f5f8;
+        --nav-a-hover-color: #3498db;
+        --post-sec-text-color: #718096;
+        --sec-bkg: #f2f5f8;
+        --color-mode: 'light';
+        --bkg-h: rgba(255,255,255,0.6);
+        --bkg-m: #e1e4e8;
+        --home-title-color: #4169E1;
+        --shadow: 0 4px 10px rgba(0,2,4,0.06),0 0 1px rgba(0,2,4,0.11);
+        --hr-color: #ddd;
+        --bg-t: #f4f4f4;
+        --nav-bkg: rgba(255,255,255,0.6);
+    }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-mode: 'dark';
+  }
+
+  :root:not([data-theme]) {
+    --first-text-color: hsla(0,0%,100%,0.92);
+    --second-text-color: hsla(0,0%,100%,0.86);
+    --third-text-color: #a7a9ad;
+    --default-text-color: #505050;
+    --default-link-color: #1589e9;
+    --link-color: #000000;
+    --second-link-color: #30a9de;
+    --post-bkg-color: #252d38;
+    --page-bkg-color: #181c27;
+    --nav-a-hover-color: #3498db;
+    --post-sec-text-color: #a7a9ad;
+    --sec-bkg: #364151;
+    --bkg-h: rgba(255,255,255,0.2);
+    --bkg-m: rgba(255,255,255,0.1);
+    --home-title-color: rgb(226, 82, 90);
+    --code-color:#3e4b5e;
+    --shadow: none;
+    --hr-color: #718096;
+    --bg-t: #364151;
+    --nav-bkg: rgba(13,17,23,0.6);
+  }
+}
+
+[data-theme='dark'] {
+    --shadow-color: rgba(0,0,0,0.2);
+    --shadow-hover-color: rgba(0,0,0,0.28);
+    --first-text-color: hsla(0,0%,100%,0.92);
+    --second-text-color: hsla(0,0%,100%,0.86);
+    --third-text-color: #a7a9ad;
+    --default-text-color: #505050;
+    --default-link-color: #1589e9;
+    --link-color: #000000;
+    --second-link-color: #30a9de;
+    --post-bkg-color: #252d38;
+    --page-bkg-color: #181c27;
+    --nav-a-hover-color: #3498db;
+    --post-sec-text-color: #a7a9ad;
+    --sec-bkg: #364151;
+    --bkg-h: rgba(255,255,255,0.2);
+    --bkg-m: rgba(255,255,255,0.1);
+    --home-title-color: rgb(226, 82, 90);
+    --code-color:#3e4b5e;
+    --shadow: none;
+    --hr-color: #718096;
+    --bg-t: #364151;
+    --nav-bkg: rgba(13,17,23,0.6);
+}
+
+</style>
+
+
+
+<style>
+#page-main,footer,.p-btn{
+    display: none;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+body {
+    background-color: var(--page-bkg-color);
+    color: var(--second-text-color);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    transition: all .3s;
+}
+a {
+    color: var(--default-link-color);
+    text-decoration: none;
+    background-color: transparent;
+}
+a:hover{
+    color: var(--second-link-color);
+}
+.main-content,.post-card-main{
+    margin: 30px;
+}
+
+
+
+@media (max-width: 410px){
+    .post-card-main{
+        max-width: 350px!important;
+    }
+}
+
+@media (max-width: 980px){
+    .post-card-main{
+        max-width: 520px!important;
+    }
+}
+
+
+@media (min-width: 780px){ 
+    h3{
+        font-size: 1.5rem;
+        line-height: 1.5em;
+    }
+}
+@media (min-width: 1280px){ 
+    h3{
+        font-size: 1.7rem;
+        line-height: 1.5em;
+    }
+}
+@media (min-width: 2096px){ 
+    h3{
+        font-size: 1.8rem;
+        line-height: 1.5em;
+    }
+}
+
+.text-center{
+    text-align: center!important;
+}
+.middle-center{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    height: 100%;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    height: 54px;
+    padding: 0 1.25rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--bkg-m);
+    background-color: var(--nav-bkg);
+    backdrop-filter: blur(4px);
+    transition: all .3s;
+}
+header .header__left, header .header__right {
+    display: flex;
+    align-items: center;
+    font-family: rubik,sans-serif,Varela Round;
+}
+header .header__left .logo__text {
+    font-size: 18px;
+    font-weight: 450;
+    padding: 14.5px 10px;
+    border-radius: 5px;
+    color: var(--second-text-color);
+}
+header .header__right .navbar__menus {
+    height: 54px;
+    padding: 0 0 0 15px;
+}
+header .header__right .button {
+    color: var(--second-text-color);
+}
+header .header__right .navbar__menus .navbar-menu {
+    display: inline-block;
+    align-items: center;
+    height: 54px;
+    padding: 0 10px;
+    font-size: 16px;
+    line-height: 54px;
+}
+header .header__right .dropdown-icon {
+    display: none;
+    height: 54px;
+    padding: 15px 10px;
+    border: 0;
+    background-color: transparent;
+}
+header .header__right .dropdown-menus {
+    line-height: 2rem;
+    animation: slide-in .15s ease 1;
+    display: none;
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: calc(54px + 10px);
+    border-radius: 6px;
+    padding: 24px;
+    background-color: var(--page-bkg-color);
+    border: 1px solid var(--bkg-m);
+    z-index: 9999;
+    justify-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+header .header__right #btn-search, header .header__right #btn-toggle-dark{
+    display: inline-block;
+    padding:  18px 10px;
+    height: 25px;
+}
+header .header__right #btn-dropdown{
+  display: inline-block;
+  padding:  13.5px 0;
+}
+header .header__right .dropdown-menus .dropdown-menu {
+    padding: 10px;
+    color: var(--second-text-color);
+}
+@media screen and (max-width: 764px){
+.navbar__menus {
+    display: none!important;
+}
+.dropdown-icon {
+    display: inline-block!important;
+}
+}
+.p-btn{
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    contain: layout;
+}
+.toc-btn,.click-btn{
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    align-items: center;
+    margin-top: .5rem;
+    font-size: .75rem;
+    background-color: var(--sec-bkg);
+    display: block;
+    padding: 0.9rem;
+    box-shadow: 0 0.3rem 0.6rem rgba(48,55,66,.15);
+    border: none;
+    border-radius: 0.5rem;
+    line-height: 1;
+    color: var(--first-text-color);
+}
+.toc-link{
+    color: var(--second-text-color);
+}
+
+#css-loading h3{
+    font-weight: 500;
+    font-size: 1.4rem;
+    text-align: center;
+    position: fixed;
+    top: 200px;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    animation: cssLoad;
+    animation-delay: 0.3s;
+    -webkit-animation: cssLoad;
+    -webkit-animation-delay: 0.3s;
+}
+@keyframes cssLoad {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.9;
+    }
+}
+
+
+.memorial {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); filter:gray;
+}
+
+
+    .post-copyright:after {
+        position: absolute;
+        color: #fff;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 496 512'%3E%3Cpath fill='gray' d='M245.8 214.9l-33.2 17.3c-9.4-19.6-25.2-20-27.4-20-22.2 0-33.3 14.6-33.3 43.9 0 23.5 9.2 43.8 33.3 43.8 14.4 0 24.6-7 30.5-21.3l30.6 15.5a73.2 73.2 0 01-65.1 39c-22.6 0-74-10.3-74-77 0-58.7 43-77 72.6-77 30.8-.1 52.7 11.9 66 35.8zm143 0l-32.7 17.3c-9.5-19.8-25.7-20-27.9-20-22.1 0-33.2 14.6-33.2 43.9 0 23.5 9.2 43.8 33.2 43.8 14.5 0 24.7-7 30.5-21.3l31 15.5c-2 3.8-21.3 39-65 39-22.7 0-74-9.9-74-77 0-58.7 43-77 72.6-77C354 179 376 191 389 214.8zM247.7 8C104.7 8 0 123 0 256c0 138.4 113.6 248 247.6 248C377.5 504 496 403 496 256 496 118 389.4 8 247.6 8zm.8 450.8c-112.5 0-203.7-93-203.7-202.8 0-105.5 85.5-203.3 203.8-203.3A201.7 201.7 0 01451.3 256c0 121.7-99.7 202.9-202.9 202.9z'/%3E%3C/svg%3E");
+        content: ' ';
+        height: 10rem;
+        width: 10rem;
+        right: -2rem;
+        top: -2rem;
+        opacity: .1;
+    }
+
+</style>
+
+    
+
+    
+        <!--
+        <link rel="stylesheet" href="/css/page.css" media="print"
+            onload="this.media='all';this.onload=null">
+        <noscript>-->
+            <link rel="stylesheet" href="/css/page.css">
+        <!--</noscript>-->
+    
+    
+    <link rel="stylesheet" href="/css/main.css" media="print" onload="this.media='all';this.onload=null">
+    <noscript>
+        <link rel="stylesheet" href="/css/main.css">
+    </noscript>
+
+    
+    <script src="/js/main.js"></script>
+    
+<meta name="generator" content="Hexo 7.2.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+    <body>
+        <header>
+            
+<div class="header__left">
+	<a href="/" class="button"><span class="logo__text">正是修行时</span></a>
+</div>
+<div class="header__right">
+	<div class="navbar__menus">
+		
+		<a href="/" class="button">
+			<div class="navbar-menu">首页</div>
+		</a>
+		
+		<a href="/archives/" class="button">
+			<div class="navbar-menu">归档</div>
+		</a>
+		
+		<a href="/categories/" class="button">
+			<div class="navbar-menu">分类</div>
+		</a>
+		
+		<a href="/tags/" class="button">
+			<div class="navbar-menu">标签</div>
+		</a>
+		
+		<a href="/record/" class="button">
+			<div class="navbar-menu">记录</div>
+		</a>
+		
+		<a href="/about/" class="button">
+			<div class="navbar-menu">关于</div>
+		</a>
+		
+	</div>
+	
+	<a href="/search/" class="button">
+		<div id="btn-search">
+			<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1024 1024" width="24" height="24" fill="currentColor"
+				stroke="currentColor" stroke-width="32">
+				<path
+					d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z">
+				</path>
+			</svg>
+		</div>
+	</a>
+	
+	<a href="javaScript:void(0);" class="button" id="btn-toggle-dark">
+		<div>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none"
+				stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+			</svg>
+		</div>
+	</a>
+	<a href="javaScript:void(0);" class="dropdown-icon button">
+		<div id="btn-dropdown">
+			<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1024 1024" width="24" height="24" fill="currentColor"
+				stroke="currentColor" stroke-width="32" stroke-linecap="round">
+				<path
+					d="M903.43 561.52H148.8c-13.25 0-24-10.75-24-24s10.75-24 24-24h754.63c13.25 0 24 10.75 24 24s-10.75 24-24 24zM903.43 204.31H148.8c-13.25 0-24-10.75-24-24s10.75-24 24-24h754.63c13.25 0 24 10.75 24 24s-10.75 24-24 24zM903.43 918.73H148.8c-13.25 0-24-10.75-24-24s10.75-24 24-24h754.63c13.25 0 24 10.75 24 24s-10.75 24-24 24z"
+					fill="currentColor"></path>
+			</svg>
+		</div>
+	</a>
+	<div class="dropdown-menus" id="dropdown-menus">
+		
+		<a href="/" class="dropdown-menu button">首页</a>
+		<br>
+		
+		<a href="/archives/" class="dropdown-menu button">归档</a>
+		<br>
+		
+		<a href="/categories/" class="dropdown-menu button">分类</a>
+		<br>
+		
+		<a href="/tags/" class="dropdown-menu button">标签</a>
+		<br>
+		
+		<a href="/record/" class="dropdown-menu button">记录</a>
+		<br>
+		
+		<a href="/about/" class="dropdown-menu button">关于</a>
+		<br>
+		
+	</div>
+</div>
+
+        </header>
+        <div id="top"></div>
+        <div id="page-main" class="main-content">
+        <div class="mg-top">
+            
+
+<article class="page">
+<div id="post-meta-m">
+    <div class="post-meta" id="post-meta">
+  <h3>Tiny JavaScript Compiler</h3>
+    
+      <span class="post-meta-label">
+        minko_gechev
+      </span>
+    
+    
+      <span class="post-meta-label">
+        <span class="p-dot"></span>
+        <time datetime="2018-10-01 23:00" pubdate>
+          2018-10-01
+        </time>
+      </span>
+    
+    
+    
+    
+  </div>
+  
+</div>
+<div class="article-m">
+  <div class="post-toc">
+    
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Why-do-I-need-this"><span class="toc-number">1.</span> <span class="toc-text">Why do I need this?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#What-are-we-going-to-cover"><span class="toc-number">2.</span> <span class="toc-text">What are we going to cover?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Introducing-a-Simple-Prefix-Language"><span class="toc-number">3.</span> <span class="toc-text">Introducing a Simple Prefix Language</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Developing-the-Compiler%E2%80%99s-Front-End"><span class="toc-number">4.</span> <span class="toc-text">Developing the Compiler’s Front End</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Developing-a-Lexical-Analyzer"><span class="toc-number">4.1.</span> <span class="toc-text">Developing a Lexical Analyzer</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Developing-a-Parser"><span class="toc-number">5.</span> <span class="toc-text">Developing a Parser</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-Types"><span class="toc-number">5.1.</span> <span class="toc-text">Node Types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Parser"><span class="toc-number">5.2.</span> <span class="toc-text">The Parser</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Parsing-Operations"><span class="toc-number">5.2.1.</span> <span class="toc-text">Parsing Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Recursive-Descent-Parsing"><span class="toc-number">5.3.</span> <span class="toc-text">Recursive Descent Parsing</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Developing-the-Transpiler"><span class="toc-number">6.</span> <span class="toc-text">Developing the Transpiler</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Wiring-Everything-Together"><span class="toc-number">7.</span> <span class="toc-text">Wiring Everything Together</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number">8.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#References"><span class="toc-number">9.</span> <span class="toc-text">References</span></a></li></ol>
+    
+  </div>
+    <div id="article">
+      <div id="post-content" class="markdown-body textretty">
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This blog is from minko_gechev, and in following content, the "I" refers to minko_gechev. And this blog inspire me in a very impressive way.</span><br></pre></td></tr></table></figure>
+ <span id="more"></span>
+
+<p>I already wrote a couple of essays related to the development of programming languages that I was extremely excited about! For instance, in “<a target="_blank" rel="noopener" href="https://blog.mgechev.com/2016/02/29/static-code-analysis-angular-typescript/">Static Code Analysis of Angular 2 and TypeScript Projects</a>“<sup>[1]</sup> I explored the basics of the front end of the compilers, explaining the phases of lexical analysis, syntax analysis and abstract-syntax trees.</p>
+<p>Recently I published “<a target="_blank" rel="noopener" href="https://blog.mgechev.com/2017/08/05/typed-lambda-calculus-create-type-checker-transpiler-compiler-javascript/">Developing Statically Typed Programming Language</a>“<sup>[2]</sup>. This post shown a simple, statically typed, functional programming language inspired by lambda calculus. There I outsourced the front end part of the compiler development to a parser generator and focused on the back end in the faces of a module for type checking and one for code generation.</p>
+<h1 id="Why-do-I-need-this"><a href="#Why-do-I-need-this" class="headerlink" title="Why do I need this?"></a>Why do I need this?</h1><p>You might be now wondering “<em>Why would I need to know how to develop a compiler?</em>“. There are a few important reasons:</p>
+<ul>
+<li>You will get a better understanding of how the programming languages you’re using work. This will allow you to develop more efficient programs with them.</li>
+<li>Often, you’ll have to reuse pieces of the modules described below for different purposes (for instance, parsing of configuration files, parsing of network messages, etc.).</li>
+<li>Creating a DSL. Creating a Domain Specific Language in your project could be quite handy in order to simplify tasks which otherwise take a lot of time to solve with a general purpose programming language.</li>
+</ul>
+<h1 id="What-are-we-going-to-cover"><a href="#What-are-we-going-to-cover" class="headerlink" title="What are we going to cover?"></a>What are we going to cover?</h1><p>In this blog post we’ll cover the basics from end-to-end! We’ll develop an extremely simple compiler on 25 lines of JavaScript! Our compiler will have:</p>
+<ul>
+<li>Module for lexical analysis</li>
+<li>Module for syntax analysis<ul>
+<li>The parser will be based on an EBNF grammar</li>
+<li>We will develop the parser by using a recursive descent parsing algorithm</li>
+</ul>
+</li>
+<li>Code generator</li>
+</ul>
+<p>The language that we’re going to explore is not particularly useful for developing meaningful software programs but it can be easily extended to one.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/mgechev/tiny-compiler"><strong>The entire implementation can be found at my GitHub profile</strong></a><sup>[3]</sup>.</p>
+<img src="https://blog.mgechev.com/images/simple-compiler/simple.jpg" alt="Simplicity" style="display: block; margin: auto;">
+
+<h1 id="Introducing-a-Simple-Prefix-Language"><a href="#Introducing-a-Simple-Prefix-Language" class="headerlink" title="Introducing a Simple Prefix Language"></a>Introducing a Simple Prefix Language</h1><p>Here’s how a sample expression in our language is going to look like:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mul 3 sub 2 sum 1 3 4</span><br></pre></td></tr></table></figure>
+
+<p>By the end of this article we’ll be able to transpile these expressions to JavaScript by going through phases typical for any compiler!</p>
+<p>For simplicity, there are a few rules we need to follow:</p>
+<ul>
+<li>We have only the functions: <code>mul</code>, <code>sub</code>, <code>sum</code>, <code>div</code>.</li>
+<li>Each individual string token is surrounded by whitespace.</li>
+<li>We support only natural numbers.</li>
+</ul>
+<p>In order to explore the semantics behind the expression above lets define a few JavaScript functions:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">mul</span> = (<span class="params">...operands</span>) =&gt; operands.<span class="title function_">reduce</span>(<span class="function">(<span class="params">a, c</span>) =&gt;</span> a * c, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">sub</span> = (<span class="params">...operands</span>) =&gt; operands.<span class="title function_">reduce</span>(<span class="function">(<span class="params">a, c</span>) =&gt;</span> a - c);</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">sum</span> = (<span class="params">...operands</span>) =&gt; operands.<span class="title function_">reduce</span>(<span class="function">(<span class="params">a, c</span>) =&gt;</span> a + c, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>mul</code> accepts multiple operands, passed with the spread operator. The function just multiplies all of them, so for instance <code>mul(2, 3, 4) === 24</code>. <code>sub</code> respectively subtracts the passed arguments and <code>sum</code> sums them.</p>
+<p>The expression above can be translated to the following JavaScript expression:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mul(3, sub(2, sum(1, 3, 4)))</span><br></pre></td></tr></table></figure>
+
+<p>or…</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 * (2 - (1 + 3 + 4))</span><br></pre></td></tr></table></figure>
+
+<p>Now, after we have understanding of the semantics, lets start with the front end of the compiler!</p>
+<p><em><strong>Note</strong>: Similar prefix expressions can be simply evaluated with a stack-based algorithm, however, in this case we’ll focus on concepts rather than implementation.</em></p>
+<h1 id="Developing-the-Compiler’s-Front-End"><a href="#Developing-the-Compiler’s-Front-End" class="headerlink" title="Developing the Compiler’s Front End"></a>Developing the Compiler’s Front End</h1><p>The front end of any compiler usually has the modules for <a target="_blank" rel="noopener" href="https://en.wikibooks.org/wiki/Compiler_Construction/Lexical_analysis">Lexical Analysis</a><sup>[4]</sup> and <a target="_blank" rel="noopener" href="https://en.wikibooks.org/wiki/Compiler_Construction/Syntax_Analysis">Syntax Analysis</a><sup>[5]</sup>. In this section we’ll build both modules in a few lines of JavaScript!</p>
+<h2 id="Developing-a-Lexical-Analyzer"><a href="#Developing-a-Lexical-Analyzer" class="headerlink" title="Developing a Lexical Analyzer"></a>Developing a Lexical Analyzer</h2><p>The phase of lexical analysis is responsible for dividing the input string (or stream of characters) of the program into smaller pieces called <strong>tokens</strong>. The tokens usually carries information about their type (if they are numbers, operators, keywords, identifiers, etc), the substring of the program they represent and their position in the program. The position is usually used for reporting user friendly errors in case of invalid syntactical constructs.</p>
+<p>For instance, if we have the JavaScript program:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (foo) {</span><br><span class="line">  <span class="title function_">bar</span>();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>A sample lexical analyzer for JavaScript will produce the output:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  {</span><br><span class="line">    <span class="attr">lexeme</span>: <span class="string">'if'</span>,</span><br><span class="line">    <span class="attr">type</span>: <span class="string">'keyword'</span>,</span><br><span class="line">    <span class="attr">position</span>: {</span><br><span class="line">      <span class="attr">row</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">col</span>: <span class="number">0</span></span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  {</span><br><span class="line">    <span class="attr">lexeme</span>: <span class="string">'('</span>,</span><br><span class="line">    <span class="attr">type</span>: <span class="string">'open_paran'</span>,</span><br><span class="line">    <span class="attr">position</span>: {</span><br><span class="line">      <span class="attr">row</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">col</span>: <span class="number">3</span></span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  {</span><br><span class="line">    <span class="attr">lexeme</span>: <span class="string">'foo'</span>,</span><br><span class="line">    <span class="attr">type</span>: <span class="string">'identifier'</span>,</span><br><span class="line">    <span class="attr">position</span>: {</span><br><span class="line">      <span class="attr">row</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">col</span>: <span class="number">4</span></span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  ...</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>We’ll keep our lexical analyzer as simple as possible. In fact, we’ll implement it on a single line of JavaScript:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">lex</span> = str =&gt; str.<span class="title function_">split</span>(<span class="string">' '</span>).<span class="title function_">map</span>(<span class="function"><span class="params">s</span> =&gt;</span> s.<span class="title function_">trim</span>()).<span class="title function_">filter</span>(<span class="function"><span class="params">s</span> =&gt;</span> s.<span class="property">length</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Here we split the string by a single space, we map the produced substrings to their trimmed version and filter the empty strings.</p>
+<p>Invoking the lexer with an expression will produce an array of strings:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">lex</span>(<span class="string">'mul 3 sub 2 sum 1 3 4'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ["mul", "3", "sub", "2", "sum", "1", "3", "4"]</span></span><br></pre></td></tr></table></figure>
+
+<p>This is completely enough for our purpose!</p>
+<p>Now lets go to the phase of syntax analysis!</p>
+<h1 id="Developing-a-Parser"><a href="#Developing-a-Parser" class="headerlink" title="Developing a Parser"></a>Developing a Parser</h1><p>The syntax analyzer (often know as parser) is the module of a compiler which out of a list (or stream) of tokens produces an <a target="_blank" rel="noopener" href="https://en.wikibooks.org/wiki/Compiler_Construction/Case_Study_1B#Abstract_Syntax_Trees">Abstract Syntax Tree</a><sup>[6]</sup> (or in short an AST). Along the process, the syntax analyzer may also produce syntax errors in case of invalid programs.</p>
+<img src="https://blog.mgechev.com/images/simple-compiler/tree.jpg" alt="Nature Tree" style="display: block; margin: auto;">
+
+<p>Usually, the parser is implemented based on a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">grammar</a><sup>[7]</sup>. Here’s the grammar of our language:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9</span><br><span class="line">num = digit+</span><br><span class="line">op = sum | sub | mul | div</span><br><span class="line">expr = num | op expr+</span><br></pre></td></tr></table></figure>
+
+<p>This basically means that we have digits which composed together can form numbers (<code>num</code>). We have 4 operations and an expression can be either a <code>num</code>ber, or <code>op</code>eration, followed by one or more <code>expr</code>essions. We’ll refer to the individual definitions in the grammar (for instance to <code>num</code> and <code>op</code>) as rules.</p>
+<p>This is the so called <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF grammar</a><sup>[6]</sup>. Look at the grammar for a bit, try to understand it, and after that completely forget about it! We’ll come back to the grammar after we explain the parser and you’ll see how everything connects together!</p>
+<p>As we mentioned, a parser is a tool which turns a list of tokens to an AST.</p>
+<p>For instance, for our expression:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mul 3 sub 2 sum 1 3 4</span><br></pre></td></tr></table></figure>
+
+<p>The parser will produce the following AST, based on the grammar above:</p>
+<div style="width: 300px; height: 300px; display: block; margin: auto;">
+  <img src="https://blog.mgechev.com/images/simple-compiler/ast.svg">
+</div>
+
+<p>Lets explore the algorithm for this!</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Op</span> = <span class="title class_">Symbol</span>(<span class="string">'op'</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Num</span> = <span class="title class_">Symbol</span>(<span class="string">'num'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">parse</span> = tokens =&gt; {</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> c = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">peek</span> = (<span class="params"></span>) =&gt; tokens[c];</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">consume</span> = (<span class="params"></span>) =&gt; tokens[c++];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">parseNum</span> = (<span class="params"></span>) =&gt; ({ <span class="attr">val</span>: <span class="built_in">parseInt</span>(<span class="title function_">consume</span>()), <span class="attr">type</span>: <span class="title class_">Num</span> });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">parseOp</span> = (<span class="params"></span>) =&gt; {</span><br><span class="line">    <span class="keyword">const</span> node = { <span class="attr">val</span>: <span class="title function_">consume</span>(), <span class="attr">type</span>: <span class="title class_">Op</span>, <span class="attr">expr</span>: [] };</span><br><span class="line">    <span class="keyword">while</span> (<span class="title function_">peek</span>()) node.<span class="property">expr</span>.<span class="title function_">push</span>(<span class="title function_">parseExpr</span>());</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">parseExpr</span> = (<span class="params"></span>) =&gt; <span class="regexp">/\d/</span>.<span class="title function_">test</span>(<span class="title function_">peek</span>()) ? <span class="title function_">parseNum</span>() : <span class="title function_">parseOp</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">parseExpr</span>();</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+<p>The bad news is that there are a lot of things going on. The good news is that this is the most complicated part of the compiler!</p>
+<p>Lets divide the code into parts and look into each one step by step.</p>
+<h2 id="Node-Types"><a href="#Node-Types" class="headerlink" title="Node Types"></a>Node Types</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Op</span> = <span class="title class_">Symbol</span>(<span class="string">'op'</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Num</span> = <span class="title class_">Symbol</span>(<span class="string">'num'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>First we define the different node types that we are going to have in the AST. We’ll have only numbers and operations. For example, the number node <code>42</code> will look like this:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">  <span class="attr">type</span>: <span class="title class_">Num</span>,</span><br><span class="line">  <span class="attr">val</span>: <span class="number">42</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>The operator <code>sum</code>, applied to <code>2</code>, <code>3</code>, <code>4</code> will look like this:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">  <span class="attr">type</span>: <span class="title class_">Op</span>,</span><br><span class="line">  <span class="attr">val</span>: <span class="string">'sum'</span>,</span><br><span class="line">  <span class="attr">expr</span>: [{</span><br><span class="line">    <span class="attr">type</span>: <span class="title class_">Num</span>,</span><br><span class="line">    <span class="attr">val</span>: <span class="number">2</span></span><br><span class="line">  }, {</span><br><span class="line">    <span class="attr">type</span>: <span class="title class_">Num</span>,</span><br><span class="line">    <span class="attr">val</span>: <span class="number">3</span></span><br><span class="line">  }, {</span><br><span class="line">    <span class="attr">type</span>: <span class="title class_">Num</span>,</span><br><span class="line">    <span class="attr">val</span>: <span class="number">4</span></span><br><span class="line">  }]</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>That’s how simple is that!</p>
+<h2 id="The-Parser"><a href="#The-Parser" class="headerlink" title="The Parser"></a>The Parser</h2><p>After we declare the node types, we define a function called <code>parse</code> which accepts a single argument called <code>tokens</code>. Inside of it we define five more functions:</p>
+<ul>
+<li><code>peek</code> - returns the element of <code>tokens</code> associated with the current value of the <code>c</code> local variable.</li>
+<li><code>consume</code> - returns the element of <code>tokens</code> associated with the current value of the <code>c</code> local variable and increments <code>c</code>.</li>
+<li><code>parseNum</code> - gets the current token (i.e. invokes <code>peek()</code>), parses it to a natural number and returns a new number token.</li>
+<li><code>parseOp</code> - we’ll explore in a little bit.</li>
+<li><code>parseExpr</code> - checks if the current token matches the regular expression <code>/\d/</code> (i.e. is a number) and invokes <code>parseNum</code> if the match was successful, otherwise returns <code>parseOp</code>.</li>
+</ul>
+<h3 id="Parsing-Operations"><a href="#Parsing-Operations" class="headerlink" title="Parsing Operations"></a>Parsing Operations</h3><p>The <code>parseOp</code> is maybe the most complicated function from the parser above. That’s the case because of the loop and the indirect recursion that we have. Here’s its definition one more time in order to explain it line by line:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">parseOp</span> = (<span class="params"></span>) =&gt; {</span><br><span class="line">  <span class="keyword">const</span> node = { <span class="attr">val</span>: <span class="title function_">consume</span>(), <span class="attr">type</span>: <span class="title class_">Op</span>, <span class="attr">expr</span>: [] };</span><br><span class="line">  <span class="keyword">while</span> (<span class="title function_">peek</span>()) node.<span class="property">expr</span>.<span class="title function_">push</span>(<span class="title function_">parseExpr</span>());</span><br><span class="line">  <span class="keyword">return</span> node;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+<p>Since <code>parseOp</code> has been invoked by <code>parseExpr</code> when the value of <code>peek()</code> is not a number we know that it is an operator so we create a new operation node. Note that we don’t perform any further validation, however, in a real-world programming language we’d want to do that and eventually throw a syntax error in case of unexpected token.</p>
+<p>Anyhow, in the node declaration we set the list of “sub-expressions” to be the empty list (i.e. <code>[]</code>), the operation name to the value of <code>consume()</code> and the type of the node to <code>Op</code>. Later, while we don’t reach the end of the program, we loop over all tokens by pushing the currently parsed expression to the list of “sub-expressions` of the given node. Finally, we return the node.</p>
+<p>Keep in mind that <code>while (peek()) node.expr.push(parseExpr());</code> performs an indirect recursion. In case we have the expression:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum sum 2</span><br></pre></td></tr></table></figure>
+
+<p>This will</p>
+<ul>
+<li>First, invoke <code>parseExpr</code>, which will find that the current token (i.e. <code>tokens[0]</code>) is not a number (it’s <code>sum</code>) so it’ll invoke <code>parseOp</code>.</li>
+<li>After that <code>parseOp</code> will create the operation node and because of the <code>consume()</code> call, increment the value of <code>c</code>.</li>
+<li>Next <code>parseOp</code> will iterate over the tokens, and for <code>tokens[c]</code>, where <code>c</code> now equals <code>1</code> will invoke <code>parseExpr</code>.</li>
+<li><code>parseExpr</code> will find that the current token is not a number so it’ll invoke <code>parseOp</code>.</li>
+<li><code>parseOp</code> will create another operation node and increment <code>c</code> and will start looping over the remaining tokens again.</li>
+<li><code>parseOp</code> will invoke <code>parseExpr</code> where <code>c</code> will now equal <code>2</code>.</li>
+<li>Since <code>tokens[2] === "2"</code>, <code>parseExpr</code> will invoke <code>parseNum</code> which will create a number node, incrementing the <code>c</code> variable.</li>
+<li><code>parseNum</code> will return the number node and it will be pushed into the <code>expr</code> array of the last operation node produced by the latest <code>parseOp</code> invocation.</li>
+<li>The last <code>parseOp</code> invocation will return the operation node since <code>peek()</code> will return <code>undefined</code> (<code>parseNum</code> has incremented <code>c</code> to <code>3</code> and <code>tokens[3] === undefined</code>).</li>
+<li>The node returned by the last invocation of <code>parseOp</code> will be returned to the outermost invocation of <code>parseOp</code> which will return its operation node as well.</li>
+<li>Finally, <code>parseExpr</code> will return the root operation node.</li>
+</ul>
+<p>The produced AST will look like:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">  <span class="attr">type</span>: <span class="title class_">Op</span>,</span><br><span class="line">  <span class="attr">val</span>: <span class="string">"sum"</span>,</span><br><span class="line">  <span class="attr">expr</span>: [{</span><br><span class="line">    <span class="attr">type</span>: <span class="title class_">Op</span>,</span><br><span class="line">    <span class="attr">val</span>: <span class="string">"sum"</span>,</span><br><span class="line">    <span class="attr">expr</span>: [{</span><br><span class="line">      <span class="attr">type</span>: <span class="title class_">Num</span>,</span><br><span class="line">      <span class="attr">val</span>: <span class="number">2</span></span><br><span class="line">    }]</span><br><span class="line">  }]</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>…and that’s it! The final step is to traverse this tree and produce JavaScript!</p>
+<h2 id="Recursive-Descent-Parsing"><a href="#Recursive-Descent-Parsing" class="headerlink" title="Recursive Descent Parsing"></a>Recursive Descent Parsing</h2><p>Now lets see how are the individual functions related to the grammar we defined above and see why having a grammar makes sense in general. Lets take a look at the rules in the EBNF grammar:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9</span><br><span class="line">num = digit+</span><br><span class="line">op = sum | sub | mul | div</span><br><span class="line">expr = num | op expr+</span><br></pre></td></tr></table></figure>
+
+<p>Do they now may make a bit more sense? <code>expr</code> looks very much like <code>parseExpr</code>, where we parse either a <code>num</code>ber or an <code>op</code>eration. Similarly, <code>op expr+</code> looks very much like <code>parseOp</code> and <code>num</code> like <code>parseNum</code>. In fact, very often parsers are generated directly from the grammars since there’s a direct connection between both with the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Recursive_descent_parser">recursive descent parsing algorithm</a><sup>[8]</sup>.</p>
+<p>And in fact, we just developed a simple recursive descent parser! Our parser was quite simple (well, we have only 4 <strong>production rules</strong> in the grammar) but you can imagine how complex the parser of a real-life programming language is.</p>
+<p>It’s extremely convenient to develop the grammar of a language before writing the actual parser in order to observe a simplified model of it. The parser contains a lot of details (for instance a lot of syntax constructs of the language you’re developing it with), in contrast to the grammar which is extremely simplified and minimalistic.</p>
+<h1 id="Developing-the-Transpiler"><a href="#Developing-the-Transpiler" class="headerlink" title="Developing the Transpiler"></a>Developing the Transpiler</h1><p>In this part of the post we’ll traverse the AST of the language and produce JavaScript. The entire transpiler is on 7 lines of JavaScript (literally!):</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">transpile</span> = ast =&gt; {</span><br><span class="line">  <span class="keyword">const</span> opMap = { <span class="attr">sum</span>: <span class="string">'+'</span>, <span class="attr">mul</span>: <span class="string">'*'</span>, <span class="attr">sub</span>: <span class="string">'-'</span>, <span class="attr">div</span>: <span class="string">'/'</span> };</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">transpileNode</span> = ast =&gt; ast.<span class="property">type</span> === <span class="title class_">Num</span> ? <span class="title function_">transpileNum</span>(ast) : <span class="title function_">transpileOp</span>(ast);</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">transpileNum</span> = ast =&gt; ast.<span class="property">val</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">transpileOp</span> = ast =&gt; <span class="string">`(<span class="subst">${ast.expr.map(transpileNode).join(<span class="string">' '</span> + opMap[ast.val] + <span class="string">' '</span>)}</span>)`</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">transpileNode</span>(ast);</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+<p>Lets explore the implementation line by line.</p>
+<p>First we define a function called <code>transpile</code>. It accepts as argument the AST produced by the parser. After that in the <code>opMap</code> we define the mapping between arithmetic operations and the operators in the language. Basically, <code>sum</code> maps to <code>+</code>, <code>mul</code> to <code>*</code>, etc.</p>
+<p>As next step, we define the function <code>transpileNode</code> which accepts an AST node. If the node is a number, we invoke the <code>transpileNum</code> function with the given node, otherwise, we invoke <code>transpileOp</code>.</p>
+<p>Finally, we define the two functions for transpilation of the individual nodes:</p>
+<ul>
+<li><code>transpileNum</code> - translates a number to a JavaScript number (simply by returning it).</li>
+<li><code>transpileOp</code> - translates an operation to a JavaScript arithmetic operation. Notice that we have indirect recursion here (<code>transpileOp -&gt; transpileNode -&gt; transpileOp</code>). For each operation node, we want to transpile its sub-expressions first. We do that by invoking the <code>transpileNode</code> function.</li>
+</ul>
+<p>On the last line of <code>transpile</code>‘s body, we return the result of <code>transpileNode</code> applied to the root of the tree.</p>
+<h1 id="Wiring-Everything-Together"><a href="#Wiring-Everything-Together" class="headerlink" title="Wiring Everything Together"></a>Wiring Everything Together</h1><p>Here’s how we can wire everything together:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> program = <span class="string">'mul 3 sub 2 sum 1 3 4'</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">transpile</span>(<span class="title function_">parse</span>(<span class="title function_">lex</span>(program)));</span><br><span class="line"><span class="comment">// (3 * (2 - (1 + 3 + 4)))</span></span><br></pre></td></tr></table></figure>
+
+<p>We invoke <code>lex(program)</code>, which produces the list of tokens, after that we pass the tokens to the <code>parse</code> function, which produces the AST and finally, we <code>transpile</code> the AST to JavaScript!</p>
+<img src="https://blog.mgechev.com/images/simple-compiler/wire.jpg" alt="Connecting" style="display: block; margin: auto;">
+
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>This article explained in details the development of a very simple compiler (or transpiler) of a language with prefix expressions to JavaScript. Although this was explanation of only the very basics of the compiler development we were able to cover few very important concepts:</p>
+<ul>
+<li>Lexical analysis</li>
+<li>Syntax analysis</li>
+<li>Source code generation</li>
+<li>EBNF grammars</li>
+<li>Recursive Descent Parsing</li>
+</ul>
+<p>If you’re interested in further reading, I’d recommend:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.mgechev.com/2017/08/05/typed-lambda-calculus-create-type-checker-transpiler-compiler-javascript/">Developing Statically Typed Programming Language</a></li>
+<li><a target="_blank" rel="noopener" href="https://ruslanspivak.com/lsbasi-part1/">Let’s Build A Simple Interpreter</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Compilers-Principles-Techniques-Tools-2nd/dp/0321486811">Compilers: Principles, Techniques, and Tools (2nd Edition) 2nd Edition</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091">Types and Programming Languages</a></li>
+</ul>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://mgv.io/ng-static-analysis">Static Code Analysis of Angular 2 and TypeScript Projects - https://mgv.io/ng-static-analysis</a>.</li>
+<li><a target="_blank" rel="noopener" href="https://mgv.io/typed-lambda">Developing Statically Typed Programming Language - https://mgv.io/typed-lambda</a></li>
+<li><a target="_blank" rel="noopener" href="https://mgv.io/tiny-compiler">Tiny Compiler - https://mgv.io/tiny-compiler</a></li>
+<li><a target="_blank" rel="noopener" href="https://mgv.io/wiki-lex">Lexical Analysis - https://mgv.io/wiki-lex</a></li>
+<li><a target="_blank" rel="noopener" href="https://mgv.io/wiki-parser">Syntax Analysis - https://mgv.io/wiki-parser</a></li>
+<li><a target="_blank" rel="noopener" href="https://mgv.io/wiki-case-ast">Abstract Syntax Tree - https://mgv.io/wiki-case-ast</a></li>
+<li><a target="_blank" rel="noopener" href="https://mgv.io/wiki-ebnf">EBNF grammar - https://mgv.io/wiki-ebnf</a></li>
+<li><a target="_blank" rel="noopener" href="https://mgv.io/wiki-recursive-descent-parser">Recursive Descent Parsing - https://mgv.io/wiki-recursive-descent-parser</a></li>
+</ol>
+
+      </div>
+    </div>
+</div>
+
+<div class="post-category">
+
+    <div id="p-meta-i">
+        
+              
+                <a class="hover-with-bg" href="/categories/Compilers/">Compilers</a>
+              
+                <a class="hover-with-bg" href="/categories/Compilers/Lexical-Analysis/">Lexical Analysis</a>
+              
+                <a class="hover-with-bg" href="/categories/Compilers/Lexical-Analysis/Syntax-Analysis/">Syntax Analysis</a>
+              
+                <a class="hover-with-bg" href="/categories/Compilers/Lexical-Analysis/Syntax-Analysis/Computer-Science/">Computer Science</a>
+              
+          
+          
+              
+                <a class="hover-with-bg" href="/tags/Compilers/"># Compilers</a>
+              
+                <a class="hover-with-bg" href="/tags/Lexical-Analysis/"># Lexical Analysis</a>
+              
+                <a class="hover-with-bg" href="/tags/Syntax-Analysis/"># Syntax Analysis</a>
+              
+                <a class="hover-with-bg" href="/tags/Computer-Science/"># Computer Science</a>
+              
+          
+    </div>
+</div>
+
+
+<div class="post-footer">
+  
+
+  <div class="post-copyright">
+    <p style="margin: 5px 0;">文章作者：<a href="/">minko_gechev</a></p>
+    <p style="margin: 5px 0;">文章链接：<a href="https://zhangwenfan123.github.io/2018/10/01/2018-10-24-Tiny-Compiler/">https://zhangwenfan123.github.io/2018/10/01/2018-10-24-Tiny-Compiler/</a></p>
+    <p style="margin: 5px 0;">版权声明：本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处，谢谢。</p>
+  </div>
+  
+</div>
+
+    <!-- Comments -->
+    <div class="comments">
+        
+        
+    </div>
+
+</article>
+
+
+        </div>
+        
+<footer class="text-center">
+    
+    
+    
+    
+    
+    <p>&copy;  2020 - 2021&nbsp;&nbsp;Theme Miracle</p>
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme by <a href="https://github.com/oCoke/hexo-theme-miracle" target="_blank">Miracle</a></p>
+    
+    
+</footer>
+
+<div class="p-btn">
+    
+        <a class="toc-btn" id="toc-btn"><i id="i-menu"></i></a>
+    
+    
+      <a class="toc-btn" id="share-btn"><i>
+        <svg t="1670124379155" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2683" width="25" height="25"><path d="M395.946667 234.666667v64H256v469.333333h512V522.666667h64V768a64 64 0 0 1-64 64H256a64 64 0 0 1-64-64V298.666667a64 64 0 0 1 64-64h139.946667z m335.850666-87.914667l150.848 150.826667-158.378666 158.4-45.269334-45.248L748.394667 341.333333H672c-121.685333 0-220.714667 97.024-223.914667 217.941334L448 565.333333v85.333334h-64v-85.333334C384 406.272 512.938667 277.333333 672 277.333333h99.861333l-85.312-85.333333 45.248-45.248z" p-id="2684" fill="var(--first-text-color)"></path></svg>
+      </i></a>
+    
+    <a href="javascript:window.scrollTo({top:0,behavior:'smooth'});" class="click-btn">
+      <i id="i-up"></i>
+    </a>
+</div>
+
+<!-- SCRIPTS -->
+
+
+
+
+
+
+<script>
+    document.getElementById("btn-dropdown").addEventListener('click', () => {
+      toggleClass("#dropdown-menus","display-inline");
+    });
+    console.log('\n' + ' %c Powered by Hexo Theme Miracle ' + ' %c https://github.com/oCoke/hexo-theme-miracle ' + '\n' + '\n', 'color: #fff; background: #4F9BFA; padding:5px 0;', 'background: #FFF; padding:5px 0;');
+
+    
+
+    
+  /* 小彩蛋: 饮茶先啦 */
+  setTimeout(() => {
+    var time = new Date();
+    if (time.getHours() == 15) {
+      let comment = document.createComment(' 三点几嚟！饮茶先啦！ ');
+      document.body.insertBefore(comment, document.getElementsByTagName('header')[0]);
+    }
+  },1);
+    
+</script>
+
+
+<script>
+    var postImg = document.querySelectorAll("article[class=page] img");
+    for (let imgi = 0; imgi < postImg.length; imgi++) {
+        postImg[imgi].onclick = () => {
+            let zoomImg = document.createElement("div");
+            zoomImg.id = "zoomImg";
+            zoomImg.innerHTML = `<div id="zoom-picture"></div>
+    <div class="poptrox-overlay"
+        style="position: fixed; left: 0px; top: 0px; z-index: 20000; width: 100%; height: 100%; text-align: center; cursor: zoom-out; opacity: 1;">
+        <div style="display:inline-block;height:100%;vertical-align:middle;"></div>
+        <div
+            style="position:absolute;left:0;top:0;width:100%;height:100%;background:#000000;opacity:0;filter:alpha(opacity=0);">
+        </div>
+        <div class="poptrox-popup"
+            style="display: inline-block; vertical-align: middle; position: relative; z-index: 1; cursor: zoom-out; min-width: 10px; min-height: 10px; width: auto; height: auto;">
+            <div class="loader" style="display: none;"></div>
+            <div class="pic" style="text-indent: 0px;"><img
+                    src="${ postImg[imgi].srcset || postImg[imgi].src }" alt="Loading..."
+                    style="vertical-align: bottom; max-width: 85vw; max-height: 85vh;"></div>
+        </div>
+    </div>`;
+            document.body.appendChild(zoomImg);
+                document.querySelector("#zoomImg").onclick = () => {
+                    document.querySelector("#zoomImg").remove();
+                }
+        }
+    }
+    
+</script>
+
+
+
+
+    <script>
+        query("#toc-btn")[0].onclick = () => {
+            if (query(".post-toc")[0].innerHTML) {
+                toggleClass(".post-toc", "display-inline");
+            }
+        }
+
+        if (!query(".post-toc")[0].innerHTML) {
+            addClass("#toc-btn","display-none");
+        }
+    </script>
+
+
+
+    <script>
+        query("#share-btn")[0].onclick = async () => {
+            let url = `${location.protocol}//${location.hostname}${location.port ? ":"+location.port:location.port}${location.pathname}#read=${sessionStorage.getItem(location.pathname+"_read_y") || ""}`;
+            try {
+                await navigator.clipboard.writeText(url);
+                prompt_core("分享链接已经复制至剪贴板", 4800, true);
+            } catch(e) {
+                prompt_core("分享链接复制失败，请手动复制<br/>"+url, 4800, false);
+            }
+        }
+    </script>
+
+
+
+
+
+
+
+    <script>
+        const getScrollPosition = (el = window) => ({
+            x: el.pageXOffset !== undefined ? el.pageXOffset : el.scrollLeft,
+            y: el.pageYOffset !== undefined ? el.pageYOffset : el.scrollTop
+        });
+        // 此处的 750 是「页面元素的最大宽度」
+        var wx = document.getElementsByClassName("article-m")[0].clientWidth;
+        var wy = document.getElementsByClassName("article-m")[0].clientHeight;
+        function windowScroll() {
+            // 反复修改 确保页面尺寸不改变
+            wx = document.getElementsByClassName("article-m")[0].clientWidth;
+            wy = document.getElementsByClassName("article-m")[0].clientHeight;
+            let y = Math.round(getScrollPosition().y);
+            // console.log(y);
+            // 组合字符串，同时记录页面坐标，页面宽度和高度
+            let p = `${y}:${wx}:${wy}`;
+            // 写入到 sessionStorage 中
+            sessionStorage.setItem(location.pathname + "_read_y", p);
+        }
+        // URL 中是否包含传递的坐标信息
+        setTimeout(() => {
+            if (location.hash.split("#read=").length > 1) {
+                prompt_core("已有阅读进度，正在跳转", 4800, true);
+                // 分离字符串
+                let read_y = location.hash.split("#read=")[1];
+                read_y = read_y.split(":");
+                // 组合乘积，顺滑移动至坐标
+                window.scrollTo({top: Math.round(Number(read_y[0]) * Number(read_y[1] * Number(read_y[2] / wx / wy))), behavior: "smooth"});
+            } else {
+                // 从 sessionStorage 中获取
+                let read_y = sessionStorage.getItem(location.pathname + "_read_y") || "0:0:0";
+                read_y = read_y.split(":");
+                if (read_y[0] != "0") prompt_core("已有阅读进度，正在跳转", 4800, true);
+                window.scrollTo({top: Math.round(Number(read_y[0]) * Number(read_y[1] * Number(read_y[2] / wx / wy))), behavior: "smooth"});
+            }
+        }, 500);
+        window.onscroll = windowScroll;
+    </script>
+
+
+
+
+
+        </div>
+        <div id="css-loading">
+            <h3 class="text-center">加载中...</h3>
+        </div>
+        
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
