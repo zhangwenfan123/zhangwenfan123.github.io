@@ -34,6 +34,12 @@ copyrightText:
 
 ## Working Experience
 
+### Investment Invitation Director
+Kunshan Industrial Technology Reseach Institute Co.,Ltd
+Kunshan Technology Investment Promotion Co.,Ltd
+
+>Jan 2025 -now : As investment Director, responsible for high-tech industry investment attraction.
+
 ### Investment Manager
 Suzhou Science and Technology Bureau.(Suzhou)
 
